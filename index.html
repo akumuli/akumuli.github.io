@@ -1,136 +1,23 @@
-<!DOCTYPE html>
-<html>
+---
+layout: default
+---
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Akumuli.GitHub.io : Time-series database">
+<div class="home">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+  <h1 class="page-heading">Posts</h1>
 
-    <title>Akumuli.GitHub.io</title>
-  </head>
+  <ul class="post-list">
+    {% for post in site.posts %}
+      <li>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
-  <body>
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h2>
+      </li>
+    {% endfor %}
+  </ul>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/akumuli">View on GitHub</a>
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
-          <h1 id="project_title">Akumuli.GitHub.io</h1>
-          <h2 id="project_tagline">Time-series database</h2>
-
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a id="readme-" class="anchor" href="#readme-" aria-hidden="true"><span class="octicon octicon-link"></span></a>README <a href="https://app.shippable.com/projects/5481624dd46935d5fbbf6b58/builds/latest"><img src="https://api.shippable.com/projects/5481624dd46935d5fbbf6b58/badge?branchName=master" alt="Build Status"></a>
-</h1>
-
-<p><strong>Akumuli</strong> is a time-series database. The word "akumuli" can be translated from esperanto as "accumulate".</p>
-
-<h2>
-<a id="rationale" class="anchor" href="#rationale" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h2>
-
-<p>Most open source projects focus on query language and things useful for web-analytics, but they ignore some key characteristics of time series data:</p>
-
-<ul>
-<li>High write throughput (millions of data-points per second)</li>
-<li>Very late writes can be dropped</li>
-<li>Numeric time-series can be compressed very efficiently</li>
-<li>Periodic time-series can be compressed very efficiently</li>
-<li>Compression is crucial for time-series storage!</li>
-</ul>
-
-<h2>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
-
-<ul>
-<li>Implements specialized storage engine for time-series data</li>
-<li>Memory mapped and x64 only</li>
-<li>Uses constant amount of disk space (like RRD-tool)</li>
-<li>Crash recovery </li>
-<li>Very high write throughput (about 1M writes per second on single machine)</li>
-<li>Allows unordered writes</li>
-<li>Compressed (specialized compression algorithms for different data elements - timestamps, ids, values)</li>
-<li>Easy to use server software (based on Redis protocol)</li>
-</ul>
-
-<h2>
-<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
-
-<ul>
-<li><a href="https://github.com/akumuli/Akumuli/wiki">Wiki</a></li>
-<li><a href="https://github.com/akumuli/Akumuli/wiki/Getting-started">Getting started</a></li>
-<li><a href="https://github.com/akumuli/Akumuli/wiki/API-Reference">API reference</a></li>
-</ul>
-
-<h2>
-<a id="how-to-build" class="anchor" href="#how-to-build" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to build</h2>
-
-<h3>
-<a id="ubuntu" class="anchor" href="#ubuntu" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ubuntu</h3>
-
-<h4>
-<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prerequisites</h4>
-
-<h5>
-<a id="automatic" class="anchor" href="#automatic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Automatic</h5>
-
-<ul>
-<li>Run <code>prerequisites.sh</code>. It will try to do the best thing.</li>
-</ul>
-
-<h5>
-<a id="manual" class="anchor" href="#manual" aria-hidden="true"><span class="octicon octicon-link"></span></a>Manual</h5>
-
-<p>In case automatic script didn't work:</p>
-
-<ul>
-<li>
-<p>Boost:</p>
-
-<p><code>sudo apt-get install libboost-dev libboost-system-dev libboost-thread-dev libboost-filesystem-dev libboost-test-dev libboost-coroutine-dev libboost-context-dev</code></p>
-</li>
-<li>
-<p>APR:</p>
-
-<p>`sudo apt-get install libapr1-dev libaprutil1-dev</p>
-</li>
-<li>
-<p>Cmake:</p>
-
-<p><code>sudo apt-get install cmake</code></p>
-</li>
-</ul>
-
-<h4>
-<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h4>
-
-<ol>
-<li><code>cmake .</code></li>
-<li><code>make -j</code></li>
-</ol>
-
-<h2>
-<a id="questions" class="anchor" href="#questions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Questions?</h2>
-
-<p><a href="https://groups.google.com/forum/#!forum/akumuli">Google group</a></p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
-</html>
+</div>
