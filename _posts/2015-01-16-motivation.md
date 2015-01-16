@@ -2,10 +2,10 @@
 layout:     post
 title:      Motivation
 date:       2015-01-16 19:03:29
-summary: I don't like most open-source time-series databases that was created recently, some of them lack compression, some of them is slow or focuses on the wrong problems. In my opinion good time-series database should satisfy several requirements.
+summary: I don't like most open-source time-series databases that have been created recently, some of them lack compression, some of them is slow or focuses on the wrong problems. In my opinion good time-series database should satisfy several requirements.
 categories: akumuli
 ---
-I don't like most open-source time-series databases that was created recently, some of them lack compression, some of them is slow or focuses on the wrong problems.
+I don't like most open-source time-series databases that have been created recently, some of them lack compression, some of them is slow or focuses on the wrong problems.
 In my opinion good time-series database should satisfy several requirements:
 
 * Good compression. It shouldn't be possible to disable compression in configuration. It should be used by storage engine and network protocol.
