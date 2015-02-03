@@ -7,7 +7,7 @@ baseurl:     ""
 url:         "http://akumuli.org"
 
 # Google analytics
-google_analytics:
+google_analytics: "UA-47803053-1"
 
 # Optional features
 animated:           false
