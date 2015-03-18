@@ -1,7 +1,7 @@
 ﻿---
 layout:     post
 title:      Sorting, caching and concurrency
-date:       2015-02-09 15:00:00
+date:       2015-03-19 01:00:00
 summary: Akumuli is a time-series database input for which is supposed to be generated on different machines in the network. Each computer have it's own time source that can be used to generate data. Clocks on different machines...
 categories: akumuli
 ---
@@ -40,6 +40,7 @@ Sorted runs:
     [2, 3, 6]
     [5]
 ```
+
 The worst case (that is very unlikely with time-series) is reverse order of the elements in the input stream. In this case patience sort will turn into merge sort (very inefficient one).
 At the end this sorted runs can be merged using simple N-way merge, producing single sorted sequence. And it is possible to perform binary search on this sorted runs and merge results in the same way. Very handy.
 
@@ -92,6 +93,7 @@ fn reader() {
     }
 }
 ```
+
 This is an oversimplification of cause but it can show the idea. If reader gets the BUSY error it just retries. Code of the sequencer can be found [here](https://github.com/akumuli/Akumuli/blob/master/libakumuli/src/sequencer.h) and [here](https://github.com/akumuli/Akumuli/blob/master/libakumuli/src/sequencer.cpp). Method Sequencer::search contains actual synchronization code, merge_and_compress and merge methods is an another side of the coin.
 
 Akumuli have some performance tests for this subsystem:
