@@ -1,4 +1,4 @@
-﻿---
+---
 layout:     post
 title:      Sorting, caching and concurrency
 date:       2015-03-19 01:00:00
