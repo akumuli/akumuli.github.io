@@ -2,7 +2,7 @@
 layout:     post
 title:      Sorting, caching and concurrency
 date:       2015-03-19 01:00:00
-summary: Akumuli is a time-series database input for which is supposed to be generated on different machines in the network. Each computer have it's own time source that can be used to generate data. Clocks on different machines...
+summary: Akumuli is a time-series database input for which is supposed to be generated on different machines...
 categories: akumuli
 ---
 
