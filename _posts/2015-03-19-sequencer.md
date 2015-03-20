@@ -10,16 +10,7 @@ Akumuli is a time-series database input for which is supposed to be generated on
 
 Akumuli have a notion of the sliding window. Each data element has a timestamp. If some data element's timestamp doesn't fit into the sliding window this data element is old and most likely was created by error. Akumuli only accepts data elements from not too far future and not too far past.  Width of the sliding window is defined in configuration. Sequencer stores data that fits the sliding window. When data element gets too old and leaves sliding window, sequencer writes it to disk and removes it from main memory.
 
-```
-  |
-  | Late writes          Allowed writes         Future writes
-  |
-  |   HDD                   Sequencer         
-  +---------------|-------------|-------------|-------------> Time
-                 SWW           now           SWW
-
-SWW = sliding window width
-```
+![Sliding window diagram](/images/sequencer_sliding_window.png)
 
 Sequencer should have some special properties.
 - It should be possible to read data from sequencer.
@@ -73,7 +64,7 @@ Imagine that we have a bucket of sorted runs (simple sorted arrays of elements).
   [5]
 ```
 
-Akunuli solves this using array of read-write mutexes. Each reader before reading data from run number M calculates index the of the read-write mutex in the array - index = M % array length. After getting read-lock thread can start reading. Writer does the same thing, it calculates index of the mutex, gets write-lock and after that it can update the sorted run.
+Akumuli solves this using array of read-write mutexes. Each reader before reading data from run number M calculates index the of the read-write mutex in the array - index = M % array length. After getting read-lock thread can start reading. Writer does the same thing, it calculates index of the mutex, gets write-lock and after that it can update the sorted run.
 
 But this is not the end. Consider the following situation: reader starts to read data from sequencer, when it starts reading merge procedure is initated by writer-thread (last chunk is merged to HDD), while reader still didn't finished number of chunks in the sequencer is changed (one was gone). One possible solution is to use synchronization between readers and writer, when writer want to merge chunk it should asquire exclusive lock. The problem is that using lock we can create write starvation, if many readers are active at the same time writer could be blocked for arbitrary time, affecting write performance. This is bad.
 
