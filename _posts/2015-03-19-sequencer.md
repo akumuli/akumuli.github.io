@@ -13,6 +13,7 @@ Akumuli have a notion of the sliding window. Each data element has a timestamp. 
 ![Sliding window diagram](/images/sequencer_sliding_window.png)
 
 Sequencer should have some special properties.
+
 - It should be possible to read data from sequencer.
 - Readers shouldn't slow down writers, sequencer should be parallel.
 - Sequencer should be able to tolerate high insert rates.
@@ -36,21 +37,6 @@ The worst case (that is very unlikely with time-series) is reverse order of the 
 At the end this sorted runs can be merged using simple N-way merge, producing single sorted sequence. And it is possible to perform binary search on this sorted runs and merge results in the same way. Very handy.
 
 This sorting algorithm can be turned into online form using simple time-based partitioning. All the data elements with timestamps that fits into the same sliding window goes into the same bin. When bin became old and immutable (because late writes is prohibited) it should be merged and written back to disk as one chunk. So in fact, sequencer performs a series of patience sort rounds.
-
-```
-Sliding window width = 10s
-
-
-Sliding window steps:
-              [10 seconds]  [10 seconds]  [10 seconds]    ←- In RAM
-[10 seconds]                                              ←- On disk
-
-immutable on  this data is  current time  future writes
-disk data     merged now    writes goes   goes here
-              and will go   here
-              out of RAM
-              soon   
-```
 
 The most tricky part is transition between writable in memory state and immutable disk baked state. Reader can read data from disk before last bin is merged to disk and the read in memory data just after the latest bin was merged. In this case client will see the gap between in-memory and on-disk data. This should be solved using proper synchronization.
 
