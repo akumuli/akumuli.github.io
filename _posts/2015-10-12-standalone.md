@@ -2,7 +2,7 @@
 layout:     post
 title:      Why Akumuli is a standalone database?
 date:       2015-10-12 19:00:00
-summary: 
+summary: There is a lot of distributed time-series databases nowadays but Akumuli takes a different approach. It’s a standalone solution and there is some logic behind this design decision.
 categories: akumuli
 ---
 There is a lot of distributed time-series databases nowadays but Akumuli takes a different approach. It’s a standalone solution and there is some logic behind this design decision.
