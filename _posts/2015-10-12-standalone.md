@@ -7,6 +7,8 @@ categories: akumuli
 ---
 There is a lot of distributed time-series databases nowadays but Akumuli takes a different approach. It’s a standalone solution and there is some logic behind this design decision.
 
+###Time-series storage throughput requirements
+
 Time-series data storage is actually quite simple problem. It was solved many times by many different companies. And the reason why we don’t have a lot of distributed TSDB’s yet is actually very simple - most of us simply don’t need it. I’m not speaking here about monitoring startups - maybe they do need scaleable TSDB’s, but most projects simply don’t generate enough data. 
 
 Several years ago I was heavily involved in development of the SCADA system that handles data from entire russian electric grid. Time-series storage component of this system works on a single machine (with hot reserve). Difficulties were not in time-series storage throughput, actual time-series storage system were backed by relational database (because of good tooling and convenience).
@@ -15,7 +17,7 @@ Let’s do some “back of the envelope” calculations. Imagine that we have 10
 
 Modern servers are the number crunching beasts with large number of CPU’s, fast memory, storage and network. There is a good chance that it is possible to handle all your monitoring workload using only one machine.
 
-###Things that some TSDB vendors didn’t get.
+###Problem understanding
 
 It seemed that many TSDB vendors/users didn’t understand this simple things:
 
