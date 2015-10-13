@@ -17,7 +17,7 @@ Let’s do some “back of the envelope” calculations. Imagine that we have 10
 
 Modern servers are the number crunching beasts with large number of CPU’s, fast memory, storage and network. There is a good chance that it is possible to handle all your monitoring workload using only one machine.
 
-###My view of the subject
+###My views on this subject
 
 1. Modern hardware is capable to handle time-series data at large scale. Time-series data is sequential and hardware don’t need to bother with random writes and reads. Prefetching works best, all hardware resources (disk/RAM write throughput) can be utilized 100%.
 2. There is no such thing as one time-series data type! There is many different time-series types, irregular (or raw) time-series, regular (irregular time-series after PAA transform), SAXifyed time-series data, time-series data in frequency domain etc. 
