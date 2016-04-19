@@ -16,8 +16,8 @@ var searchData=
   ['interpolationsearch',['InterpolationSearch',['../structAkumuli_1_1InterpolationSearch.html',1,'Akumuli']]],
   ['interpolationsearch_3c_20searchalgorithm_20_3e',['InterpolationSearch&lt; SearchAlgorithm &gt;',['../structAkumuli_1_1InterpolationSearch.html',1,'Akumuli']]],
   ['inv_5ftable',['inv_table',['../structAkumuli_1_1SeriesMatcher.html#ab04cec827ceae20825ae4ee2abff6d08',1,'Akumuli::SeriesMatcher']]],
-  ['invertedindex',['InvertedIndex',['../structAkumuli_1_1InvertedIndex.html#a3ae0c3fb4cb12c6eb0c1b37f5ef4f87e',1,'Akumuli::InvertedIndex']]],
   ['invertedindex',['InvertedIndex',['../structAkumuli_1_1InvertedIndex.html',1,'Akumuli']]],
+  ['invertedindex',['InvertedIndex',['../structAkumuli_1_1InvertedIndex.html#a3ae0c3fb4cb12c6eb0c1b37f5ef4f87e',1,'Akumuli::InvertedIndex']]],
   ['invt',['InvT',['../structAkumuli_1_1StringTools.html#a1d7a9aa844240e7f78fc296b9efa03b8',1,'Akumuli::StringTools']]],
   ['iqueryfilter',['IQueryFilter',['../structAkumuli_1_1QP_1_1IQueryFilter.html',1,'Akumuli::QP']]],
   ['iqueryprocessor',['IQueryProcessor',['../structAkumuli_1_1QP_1_1IQueryProcessor.html',1,'Akumuli::QP']]],
@@ -27,5 +27,6 @@ var searchData=
   ['is_5fempty',['is_empty',['../structAkumuli_1_1PipelineSpout.html#a45c245f5b75951dac93e66aec61a3128',1,'Akumuli::PipelineSpout']]],
   ['is_5feof',['is_eof',['../classAkumuli_1_1ProtocolParser.html#a0e0d725810d91877de5cdf33e318529e',1,'Akumuli::ProtocolParser::is_eof()'],['../structAkumuli_1_1ByteStreamReader.html#acdde58938c1b3765868599669e57954f',1,'Akumuli::ByteStreamReader::is_eof()'],['../classAkumuli_1_1MemStreamReader.html#a6f35e5fbc120718d9e0f59be265712c0',1,'Akumuli::MemStreamReader::is_eof()'],['../classAkumuli_1_1StorageEngine_1_1NBTreeCursor.html#a8d4a173a26afd0aa1f1e001282165e77',1,'Akumuli::StorageEngine::NBTreeCursor::is_eof()']]],
   ['is_5ferror',['is_error',['../structAkumuli_1_1ExternalCursor.html#a621f6c1f45366fd25b90abb39abaec87',1,'Akumuli::ExternalCursor::is_error()'],['../structAkumuli_1_1CoroCursor.html#a7bdb59aca4511e50b3621c92e4b6aa51',1,'Akumuli::CoroCursor::is_error()'],['../structAkumuli_1_1AkumuliCursor.html#ae5d7170a447b90743d05f110f70e489e',1,'Akumuli::AkumuliCursor::is_error()'],['../structAkumuli_1_1DbCursor.html#adae23884868dc46b8d5de090cf868a39',1,'Akumuli::DbCursor::is_error()']]],
+  ['item',['Item',['../structAkumuli_1_1QP_1_1SpaceSaver_1_1Item.html',1,'Akumuli::QP::SpaceSaver']]],
   ['iter',['iter',['../classAkumuli_1_1StorageEngine_1_1NBTree.html#a9a7c9e77181816a25579c474229de962',1,'Akumuli::StorageEngine::NBTree']]]
 ];

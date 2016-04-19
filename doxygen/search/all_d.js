@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['n',['N',['../structAkumuli_1_1QP_1_1SpaceSaver.html#a7c58d2d3a18dfa7ffd30d2ef75dad93b',1,'Akumuli::QP::SpaceSaver']]],
   ['names',['names',['../structAkumuli_1_1SeriesMatcher.html#a14542f00854e3928987e385cec28fb9b',1,'Akumuli::SeriesMatcher']]],
   ['namesofinterest_5f',['namesofinterest_',['../structAkumuli_1_1QP_1_1ScanQueryProcessor.html#a7adb65e5a0ddc4184ecae65064238f8a',1,'Akumuli::QP::ScanQueryProcessor']]],
   ['nbtree',['NBTree',['../classAkumuli_1_1StorageEngine_1_1NBTree.html#a69f6b4bcfe70ecd4a7884d766fc780ec',1,'Akumuli::StorageEngine::NBTree']]],

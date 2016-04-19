@@ -12,6 +12,7 @@ var searchData=
   ['akumuliconnection',['AkumuliConnection',['../classAkumuli_1_1AkumuliConnection.html',1,'Akumuli']]],
   ['akumulicursor',['AkumuliCursor',['../structAkumuli_1_1AkumuliCursor.html',1,'Akumuli']]],
   ['allocate',['allocate',['../structAkumuli_1_1ChunkWriter.html#a2ccec1fe9c1c7acc274d75bcc948f5bf',1,'Akumuli::ChunkWriter::allocate()'],['../structAkumuli_1_1Base128StreamWriter.html#a50a0e1067225aa06809908967368c3df',1,'Akumuli::Base128StreamWriter::allocate()']]],
+  ['anomalydetector',['AnomalyDetector',['../structAkumuli_1_1QP_1_1AnomalyDetector.html',1,'Akumuli::QP']]],
   ['anomalydetectoriface',['AnomalyDetectorIface',['../structAkumuli_1_1QP_1_1AnomalyDetectorIface.html',1,'Akumuli::QP']]],
   ['anomalydetectorpipeline',['AnomalyDetectorPipeline',['../structAkumuli_1_1QP_1_1AnomalyDetectorPipeline.html',1,'Akumuli::QP']]],
   ['anomalydetectorutil',['AnomalyDetectorUtil',['../structAkumuli_1_1QP_1_1AnomalyDetectorUtil.html',1,'Akumuli::QP']]],

@@ -5,6 +5,7 @@ var searchData=
   ['aku_5fentryindexrecord',['aku_EntryIndexRecord',['../structAkumuli_1_1aku__EntryIndexRecord.html',1,'Akumuli']]],
   ['akumuliconnection',['AkumuliConnection',['../classAkumuli_1_1AkumuliConnection.html',1,'Akumuli']]],
   ['akumulicursor',['AkumuliCursor',['../structAkumuli_1_1AkumuliCursor.html',1,'Akumuli']]],
+  ['anomalydetector',['AnomalyDetector',['../structAkumuli_1_1QP_1_1AnomalyDetector.html',1,'Akumuli::QP']]],
   ['anomalydetectoriface',['AnomalyDetectorIface',['../structAkumuli_1_1QP_1_1AnomalyDetectorIface.html',1,'Akumuli::QP']]],
   ['anomalydetectorpipeline',['AnomalyDetectorPipeline',['../structAkumuli_1_1QP_1_1AnomalyDetectorPipeline.html',1,'Akumuli::QP']]],
   ['anomalydetectorutil',['AnomalyDetectorUtil',['../structAkumuli_1_1QP_1_1AnomalyDetectorUtil.html',1,'Akumuli::QP']]],

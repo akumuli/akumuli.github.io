@@ -1,6 +1,7 @@
 var searchData=
 [
   ['rand',['Rand',['../classAkumuli_1_1Rand.html',1,'Akumuli']]],
+  ['randomsamplingnode',['RandomSamplingNode',['../structAkumuli_1_1QP_1_1RandomSamplingNode.html',1,'Akumuli::QP']]],
   ['range',['range',['../structAkumuli_1_1QP_1_1ScanQueryProcessor.html#a397a13e4c4d1b0e5ed965969c304e84e',1,'Akumuli::QP::ScanQueryProcessor::range()'],['../structAkumuli_1_1QP_1_1MetadataQueryProcessor.html#aebf41134f1214f84740a791d54fc819b',1,'Akumuli::QP::MetadataQueryProcessor::range()'],['../structAkumuli_1_1QP_1_1IQueryProcessor.html#aafc3f6f72b8d0669cf1ada6944215159',1,'Akumuli::QP::IQueryProcessor::range()']]],
   ['range_5f',['range_',['../structAkumuli_1_1QP_1_1ScanQueryProcessor.html#abb0638d37b603c69ba4f32aa495f8324',1,'Akumuli::QP::ScanQueryProcessor']]],
   ['rdbuf_5fpos_5f',['rdbuf_pos_',['../structAkumuli_1_1QueryResultsPooler.html#a5053fa60c4979e6c7d628b84841f3cf3',1,'Akumuli::QueryResultsPooler']]],

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['rand',['Rand',['../classAkumuli_1_1Rand.html',1,'Akumuli']]],
+  ['randomsamplingnode',['RandomSamplingNode',['../structAkumuli_1_1QP_1_1RandomSamplingNode.html',1,'Akumuli::QP']]],
   ['readoperation',['ReadOperation',['../structAkumuli_1_1ReadOperation.html',1,'Akumuli']]],
   ['readoperationbuilder',['ReadOperationBuilder',['../structAkumuli_1_1ReadOperationBuilder.html',1,'Akumuli']]],
   ['regexfilter',['RegexFilter',['../structAkumuli_1_1QP_1_1RegexFilter.html',1,'Akumuli::QP']]],

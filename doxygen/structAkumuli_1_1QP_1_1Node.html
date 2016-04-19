@@ -100,7 +100,17 @@ Inheritance diagram for Akumuli::QP::Node:</div>
  <div class="center">
   <img src="structAkumuli_1_1QP_1_1Node.png" usemap="#Akumuli::QP::Node_map" alt=""/>
   <map id="Akumuli::QP::Node_map" name="Akumuli::QP::Node_map">
-<area href="structAkumuli_1_1TerminalNode.html" alt="Akumuli::TerminalNode" shape="rect" coords="0,56,140,80"/>
+<area href="structAkumuli_1_1QP_1_1AnomalyDetector.html" alt="Akumuli::QP::AnomalyDetector" shape="rect" coords="300,56,590,80"/>
+<area href="structAkumuli_1_1QP_1_1FilterByIdNode.html" alt="Akumuli::QP::FilterByIdNode&lt; Predicate &gt;" shape="rect" coords="300,112,590,136"/>
+<area href="structAkumuli_1_1QP_1_1Limiter.html" alt="Akumuli::QP::Limiter" shape="rect" coords="300,168,590,192"/>
+<area href="structAkumuli_1_1QP_1_1PAA.html" title="Generic piecewise aggregate approximation. " alt="Akumuli::QP::PAA&lt; State &gt;" shape="rect" coords="300,224,590,248"/>
+<area href="structAkumuli_1_1QP_1_1RandomSamplingNode.html" alt="Akumuli::QP::RandomSamplingNode" shape="rect" coords="300,280,590,304"/>
+<area href="structAkumuli_1_1QP_1_1SAXNode.html" alt="Akumuli::QP::SAXNode" shape="rect" coords="300,336,590,360"/>
+<area href="structAkumuli_1_1QP_1_1SpaceSaver.html" alt="Akumuli::QP::SpaceSaver&lt; weighted &gt;" shape="rect" coords="300,392,590,416"/>
+<area href="structAkumuli_1_1TerminalNode.html" alt="Akumuli::TerminalNode" shape="rect" coords="300,448,590,472"/>
+<area href="structAkumuli_1_1QP_1_1PAA.html" alt="Akumuli::QP::PAA&lt; MeanCounter &gt;" shape="rect" coords="300,504,590,528"/>
+<area href="structAkumuli_1_1QP_1_1PAA.html" alt="Akumuli::QP::PAA&lt; MedianCounter &gt;" shape="rect" coords="300,560,590,584"/>
+<area href="structAkumuli_1_1QP_1_1PAA.html" alt="Akumuli::QP::PAA&lt; ValueSelector&lt; SelectFn &gt; &gt;" shape="rect" coords="300,616,590,640"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -149,7 +159,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_error</b>
 </div><div class="memdoc">
 <p>This method returns set of flags that describes its functioning. </p>
 
-<p>Implemented in <a class="el" href="structAkumuli_1_1TerminalNode.html#a51f9c64ab3b529afeb5c813709a189e8">Akumuli::TerminalNode</a>.</p>
+<p>Implemented in <a class="el" href="structAkumuli_1_1TerminalNode.html#a51f9c64ab3b529afeb5c813709a189e8">Akumuli::TerminalNode</a>, <a class="el" href="structAkumuli_1_1QP_1_1SpaceSaver.html#ab7432b12a9064e1aa623933eb15ac14a">Akumuli::QP::SpaceSaver&lt; weighted &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1PAA.html#ab58c4f54de456cb94ad0475bafc81e9d">Akumuli::QP::PAA&lt; State &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1PAA.html#ab58c4f54de456cb94ad0475bafc81e9d">Akumuli::QP::PAA&lt; MeanCounter &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1PAA.html#ab58c4f54de456cb94ad0475bafc81e9d">Akumuli::QP::PAA&lt; MedianCounter &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1PAA.html#ab58c4f54de456cb94ad0475bafc81e9d">Akumuli::QP::PAA&lt; ValueSelector&lt; SelectFn &gt; &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1AnomalyDetector.html#a86a1a34b96a3872d6436234358953460">Akumuli::QP::AnomalyDetector</a>, <a class="el" href="structAkumuli_1_1QP_1_1FilterByIdNode.html#abc80bd577e3944096abef24ece7ad732">Akumuli::QP::FilterByIdNode&lt; Predicate &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1SAXNode.html#a2657ce0dca2590e9180458f0a4650812">Akumuli::QP::SAXNode</a>, <a class="el" href="structAkumuli_1_1QP_1_1RandomSamplingNode.html#a78219fdb2d708dc98d9a1f58a4c8682e">Akumuli::QP::RandomSamplingNode</a>, and <a class="el" href="structAkumuli_1_1QP_1_1Limiter.html#af21640e799ac6bac91e7a6b0d47fe9d3">Akumuli::QP::Limiter</a>.</p>
 
 </div>
 </div>
@@ -176,7 +186,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_error</b>
 </div><div class="memdoc">
 <p>Process value, return false to interrupt process. Empty sample can be sent to flush all updates. </p>
 
-<p>Implemented in <a class="el" href="structAkumuli_1_1TerminalNode.html#a67a3622718d4a7dc5646fb3360068217">Akumuli::TerminalNode</a>.</p>
+<p>Implemented in <a class="el" href="structAkumuli_1_1TerminalNode.html#a67a3622718d4a7dc5646fb3360068217">Akumuli::TerminalNode</a>, <a class="el" href="structAkumuli_1_1QP_1_1SpaceSaver.html#ab9d2bafe18b0cfdc76e94e3c89a5bd3d">Akumuli::QP::SpaceSaver&lt; weighted &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1PAA.html#adaada11e64853f4f6b83322625fa0473">Akumuli::QP::PAA&lt; State &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1PAA.html#adaada11e64853f4f6b83322625fa0473">Akumuli::QP::PAA&lt; MeanCounter &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1PAA.html#adaada11e64853f4f6b83322625fa0473">Akumuli::QP::PAA&lt; MedianCounter &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1PAA.html#adaada11e64853f4f6b83322625fa0473">Akumuli::QP::PAA&lt; ValueSelector&lt; SelectFn &gt; &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1AnomalyDetector.html#a398d0243556c1a63b398b047580fc71e">Akumuli::QP::AnomalyDetector</a>, <a class="el" href="structAkumuli_1_1QP_1_1SAXNode.html#ae641a367664dfac47c173adf40ff443f">Akumuli::QP::SAXNode</a>, <a class="el" href="structAkumuli_1_1QP_1_1FilterByIdNode.html#a3c6ef69db3eae78d2c551c1335109981">Akumuli::QP::FilterByIdNode&lt; Predicate &gt;</a>, <a class="el" href="structAkumuli_1_1QP_1_1RandomSamplingNode.html#a765c8e664a8ebf5d9da7c8d420a94344">Akumuli::QP::RandomSamplingNode</a>, and <a class="el" href="structAkumuli_1_1QP_1_1Limiter.html#a7fdd62f8040961761303369708f685a2">Akumuli::QP::Limiter</a>.</p>
 
 </div>
 </div>
@@ -186,7 +196,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_error</b>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 19 2016 18:02:44 for Akumuli by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Apr 19 2016 18:18:33 for Akumuli by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

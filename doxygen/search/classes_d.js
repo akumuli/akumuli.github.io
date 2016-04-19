@@ -1,5 +1,9 @@
 var searchData=
 [
+  ['paa',['PAA',['../structAkumuli_1_1QP_1_1PAA.html',1,'Akumuli::QP']]],
+  ['paa_3c_20meancounter_20_3e',['PAA&lt; MeanCounter &gt;',['../structAkumuli_1_1QP_1_1PAA.html',1,'Akumuli::QP']]],
+  ['paa_3c_20mediancounter_20_3e',['PAA&lt; MedianCounter &gt;',['../structAkumuli_1_1QP_1_1PAA.html',1,'Akumuli::QP']]],
+  ['paa_3c_20valueselector_3c_20selectfn_20_3e_20_3e',['PAA&lt; ValueSelector&lt; SelectFn &gt; &gt;',['../structAkumuli_1_1QP_1_1PAA.html',1,'Akumuli::QP']]],
   ['padding',['Padding',['../structAkumuli_1_1PipelineSpout_1_1Padding.html',1,'Akumuli::PipelineSpout']]],
   ['pageheader',['PageHeader',['../classAkumuli_1_1PageHeader.html',1,'Akumuli']]],
   ['pageinfo',['PageInfo',['../classAkumuli_1_1PageInfo.html',1,'Akumuli']]],
