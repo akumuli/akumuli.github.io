@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['saxencoder',['SAXEncoder',['../structAkumuli_1_1SAX_1_1SAXEncoder.html',1,'Akumuli::SAX']]],
+  ['saxword',['SAXWord',['../structAkumuli_1_1SAX_1_1SAXWord.html',1,'Akumuli::SAX']]],
+  ['scanqueryprocessor',['ScanQueryProcessor',['../structAkumuli_1_1QP_1_1ScanQueryProcessor.html',1,'Akumuli::QP']]],
+  ['searchalgorithm',['SearchAlgorithm',['../structAkumuli_1_1SearchAlgorithm.html',1,'Akumuli']]],
+  ['searcherror',['SearchError',['../structAkumuli_1_1SearchError.html',1,'Akumuli']]],
+  ['searchrange',['SearchRange',['../structAkumuli_1_1SearchRange.html',1,'Akumuli']]],
+  ['searchstats',['SearchStats',['../structAkumuli_1_1SearchStats.html',1,'Akumuli']]],
+  ['sequencer',['Sequencer',['../structAkumuli_1_1Sequencer.html',1,'Akumuli']]],
+  ['seriesmatcher',['SeriesMatcher',['../structAkumuli_1_1SeriesMatcher.html',1,'Akumuli']]],
+  ['seriesparser',['SeriesParser',['../structAkumuli_1_1SeriesParser.html',1,'Akumuli']]],
+  ['seriesslice',['SeriesSlice',['../structAkumuli_1_1SeriesSlice.html',1,'Akumuli']]],
+  ['server',['Server',['../structAkumuli_1_1Server.html',1,'Akumuli']]],
+  ['serverfactory',['ServerFactory',['../structAkumuli_1_1ServerFactory.html',1,'Akumuli']]],
+  ['serversettings',['ServerSettings',['../structAkumuli_1_1ServerSettings.html',1,'Akumuli']]],
+  ['signalhandler',['SignalHandler',['../structAkumuli_1_1SignalHandler.html',1,'Akumuli']]],
+  ['smaslidingwindow',['SMASlidingWindow',['../structAkumuli_1_1QP_1_1SMASlidingWindow.html',1,'Akumuli::QP']]],
+  ['sortedrun',['SortedRun',['../structAkumuli_1_1V2_1_1PatienceSort_1_1SortedRun.html',1,'Akumuli::V2::PatienceSort']]],
+  ['storage',['Storage',['../structAkumuli_1_1Storage.html',1,'Akumuli']]],
+  ['streamerror',['StreamError',['../classAkumuli_1_1StreamError.html',1,'Akumuli']]],
+  ['stringpool',['StringPool',['../structAkumuli_1_1StringPool.html',1,'Akumuli']]],
+  ['stringpooloffset',['StringPoolOffset',['../structAkumuli_1_1StringPoolOffset.html',1,'Akumuli']]],
+  ['stringtools',['StringTools',['../structAkumuli_1_1StringTools.html',1,'Akumuli']]],
+  ['subtreeref',['SubtreeRef',['../structAkumuli_1_1StorageEngine_1_1SubtreeRef.html',1,'Akumuli::StorageEngine']]]
+];
