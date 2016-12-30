@@ -6,6 +6,7 @@ summary: The most important component of the time-series database is a compressi
 categories: akumuli
 ---
 ####Introduction
+
 The most important component of the time-series database is a compression engine because it defines the trade-offs, and the trade-offs are shaping the architecture of the entire system.
 
 
@@ -59,6 +60,7 @@ It turns out that we may want to use different encodings in different situations
 
 
 ####VByte encoding
+
 Akumuli uses modified version of the LEB128 encoding. The original LEB128 uses low 7 bits of each byte to store a portion of data and high bit is used as a continuation flag. If this flag is set to zero then this byte is the last one otherwise, the next byte should be decoded. This encoding is used by Protobuf (https://developers.google.com/protocol-buffers/docs/encoding#varints) and many other systems.
 
 
