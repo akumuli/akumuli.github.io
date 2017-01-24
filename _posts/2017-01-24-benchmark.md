@@ -41,6 +41,7 @@ But let's look how Akumuli performs here. Akumuli doesn't support fields and tab
 
 I've run the tests locally at first, here is [the script](https://github.com/Lazin/influxdb-comparisons/blob/master/cmd/load_data.sh) output:
 
+```
 $ ./load_data.sh 
 Loading data into Akumuli
 daemon URLs: [127.0.0.1:8282]
@@ -49,11 +50,13 @@ Loading data into InfluxDB
 daemon URLs: [http://localhost:8086]
 [worker 0] backoffs took a total of 0.000000sec of runtime
 loaded 19284480 items in 423.174608sec with 1 workers (mean rate 45570.976222/sec, 19.99MB/sec from stdin)
+```
 
-Table:
-                     Run time  Write throughput
-Akumuli    151.6sec     1427650 points/sec
-InfluxDB    423sec       511407 points/sec
+
+|                |     Run time|  Write throughput |
+|---|---|---|
+|Akumuli  |  151.6sec|     1427650 points/sec|
+|InfluxDB|    423sec  |     511407 points/sec|
 
 In the case of Akumuli ingestion speed was limited by the gzip decompression speed because the CPU core that has been running gzip was 100% busy. Actual disk write throughput was steady (iotop showed around 6M/s). InfluxDB has been writing to disk around 3-6 M/s with occasional bumps up to 13M/s and it was 33M/s one time. I guess this is due to compaction process.
 
@@ -63,6 +66,7 @@ I've used only one worker thread with both databases because I wasn't able to re
 
 I tried to run this test on two m4.xlarge instances, one for database and another one to generate load. Results is here:
 
+```
 ubuntu@ip-172-31-41-230:~/work/src/influxdb-comparisons/cmd$ ./load_data.sh 
 Loading data into Akumuli
 daemon URLs: [172.31.36.43:8282]
@@ -71,6 +75,7 @@ Loading data into InfluxDB
 daemon URLs: [http://172.31.36.43:8086]
 [worker 0] backoffs took a total of 0.000000sec of runtime
 loaded 19284480 items in 614.613496sec with 1 workers (mean rate 31376.597036/sec, 13.76MB/sec from stdin)
+```
 
 As you can see, Akumuli is still faster. The throughput of both databases is smaller due to EBS volume being used instead of SSD.
 
@@ -78,8 +83,10 @@ As you can see, Akumuli is still faster. The throughput of both databases is sma
 
 InfluxDB did a great job here. As you can see it uses twice less disk space then Akumuli. It compresses this data almost as good as gzip does. This difference is due to compression algorithms being used, Akumuli uses a faster algorithm that avoids bit packing and InfluxDB uses a slower algorithm that uses bit packing and has a better compression ratio as result.
 
+```
 705M    /home/elazin/.akumuli/
 323M    /var/lib/influxdb/
+```
 
 BTW, I don't really believe in x16.5 less disk space claim. I've been using HBase for time-series for some time and I can say that with proper data block encoding and enabled compression it gives decent results.
 
