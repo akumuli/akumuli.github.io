@@ -6,7 +6,7 @@ summary: Usually, I'm trying to avoid comparisons with other databases so nobody
 categories: akumuli
 ---
 
-Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData doesn't share this judgment so they created the comprehensive test suite and published several articles comparing they product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB (v1.1.1). I forked this repo and added [Akumuli](https://github.com/akumuli/Akumuli) support. It's available here: https://github.com/Lazin/influxdb-comparisons. Now I want to share the results and some thoughts about it with you.
+Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData doesn't share this judgment so they created the comprehensive test suite and published several articles comparing they product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB (v1.1.1). I forked this repo and added [Akumuli](https://github.com/akumuli/Akumuli) support. It's available here: (https://github.com/Lazin/influxdb-comparisons). Now I want to share the results and some thoughts about it with you.
 
 There is a bunch of applications in this test suite (in /cmd dir). There is an app that generates input (one for all databases, you should tell it what database are you working with), the app that generates queries, the bunch of apps that used to load data (one per supported database), and another set of apps that can be used to benchmark each database (one per database as well) using generated queries. 
 
@@ -37,7 +37,7 @@ That's a lot of text! And the `cpu` table is not the largest one! There is a tab
 
 But let's look how Akumuli performs here. Akumuli doesn't support fields and tables (there are only series names) but it has bulk load protocol that can encode many data points that share timestamp and tags using only one message. Because of that input size for Akumuli is about the same size as InfluxDB input (~1GB). I have run the tests on my machine and on two m4.xlarge AWS instances.
 
-###Write Performance
+### Write Performance
 
 I've run the tests locally at first, here is [the script](https://github.com/Lazin/influxdb-comparisons/blob/master/cmd/load_data.sh) output:
 
@@ -59,7 +59,7 @@ In the case of Akumuli ingestion speed was limited by the gzip decompression spe
 
 I've used only one worker thread with both databases because I wasn't able to replicate the real workload the other way. In real world, each connection will write to the unique subset of series. Akumuli is optimized for this case, it scales linearly with CPU cores and it actually uses many write threads to write data to disk. If this property doesn't hold, this writer threads will need to synchronize access and this will limit throughput. Loaders from this test suite split messages amongst workers in round-robin manner but they should split them by hostname. That's why I decided to use a single worker.
 
-###AWS
+### AWS
 
 I tried to run this test on two m4.xlarge instances, one for database and another one to generate load. Results is here:
 
@@ -74,7 +74,7 @@ loaded 19284480 items in 614.613496sec with 1 workers (mean rate 31376.597036/se
 
 As you can see, Akumuli is still faster. The throughput of both databases is smaller due to EBS volume being used instead of SSD.
 
-###On Disk Compression
+### On Disk Compression
 
 InfluxDB did a great job here. As you can see it uses twice less disk space then Akumuli. It compresses this data almost as good as gzip does. This difference is due to compression algorithms being used, Akumuli uses a faster algorithm that avoids bit packing and InfluxDB uses a slower algorithm that uses bit packing and has a better compression ratio as result.
 
@@ -87,7 +87,7 @@ BTW, I don't really believe in x16.5 less disk space claim. I've been using HBas
 
 I have run query benchmarks only locally. Before running each benchmark I [cleaned](https://github.com/Lazin/influxdb-comparisons/blob/master/cmd/clear_caches.sh) file caches and then started the databases. The results are in the table below.
 
-####Akumuli results
+#### Akumuli Results
 
 |     | 1 host, 12h by 1min | 1 host, 1h by 1min | 8 hosts, 1h by 1min | 1 host, 12h by 1h |
 |-----|---------------------|--------------------|---------------------|-------------------|
@@ -97,7 +97,7 @@ I have run query benchmarks only locally. Before running each benchmark I [clean
 
 Here `1 host, 1h by 1min` means that query reads 1 hour interval with 1 minute step for 1 host.
 
-####InfluxDB results
+#### InfluxDB Results
 
 |     | 1 host, 12h by 1min | 1 host, 1h by 1min | 8 hosts, 1h by 1min | 1 host, 12h by 1h |
 |-----|---------------------|--------------------|---------------------|-------------------|
