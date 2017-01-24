@@ -6,7 +6,7 @@ summary: Usually, I'm trying to avoid comparisons with other databases so nobody
 categories: akumuli
 ---
 
-Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData doesn't share this judgment so they created the comprehensive test suite and published several articles comparing they product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB (v1.1.1). I forked this repo and added [Akumuli](https://github.com/akumuli/Akumuli) support. It's available here: (https://github.com/Lazin/influxdb-comparisons). Now I want to share the results and some thoughts about it with you.
+Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData doesn't share this judgment so they created the comprehensive test suite and published several articles comparing they product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB (v1.1.1). I forked this repo and added [Akumuli](https://github.com/akumuli/Akumuli) support. It's available [here](https://github.com/Lazin/influxdb-comparisons). Now I want to share the results and some thoughts about it with you.
 
 There is a bunch of applications in this test suite (in /cmd dir). There is an app that generates input (one for all databases, you should tell it what database are you working with), the app that generates queries, the bunch of apps that used to load data (one per supported database), and another set of apps that can be used to benchmark each database (one per database as well) using generated queries. 
 
@@ -33,7 +33,7 @@ What's the problem with this? Many Time-Series databases don't support fields (e
 {"metric":"cpu.usage_guest_nice","timestamp":1451606400000,"tags":{"arch":"x86","datacenter":"eu-west-1b","hostname":"host_0","os":"Ubuntu16.10","rack":"67","region":"eu-west-1","service":"7","service_environment":"production","service_version":"0","team":"NYC"},"value":38.24311829115428}
 ```
 
-That's a lot of text! And the `cpu` table is not the largest one! There is a table with 30+ fields and a huge set of tags. Ingestion is slow (5x slower then InfluxDB) because database needs to parse input that large, no surprises here. We can see this in the article. But if your data don't have all this fields figures will be different. I think that OpenTSDB wouldn't look that bad.
+That's a lot of text! And the `cpu` table is not the largest one! There is a table with 30+ fields and a huge set of tags. That's why ingestion in OpenTSDB is slow (5x slower then InfluxDB) because database needs to parse input that large, no surprises here. We can see this in [the article](https://www.influxdata.com/influxdb-markedly-outperforms-opentsdb-in-time-series-data-metrics-benchmark/). But if your data don't have all this fields figures will be different. I think that OpenTSDB wouldn't look that bad.
 
 But let's look how Akumuli performs here. Akumuli doesn't support fields and tables (there are only series names) but it has bulk load protocol that can encode many data points that share timestamp and tags using only one message. Because of that input size for Akumuli is about the same size as InfluxDB input (~1GB). I have run the tests on my machine and on two m4.xlarge AWS instances.
 
@@ -105,8 +105,8 @@ Here `1 host, 1h by 1min` means that query reads 1 hour interval with 1 minute s
 | avg | 4.30ms | 0.87ms | 2.51ms | 1.24ms |
 | max | 11.02ms | 5.62ms | 9.89ms | 6.26ms |
 
-As you can see, average performance is about the same (but Akumuli is just slightly faster). But max latency is quite different. I think that this is due to GC pauses. 
+As you can see, average performance is about the same (but Akumuli is just slightly faster). Both databases are column oriented, no surprises here. But max latency is quite different. I think that this is due to GC pauses in InfluxDB. 
 
 ### Final Thoughts
 
-I tried to be objective but I don't know InfluxDB very well so maybe I'm just using it incorrectly. But anyway, I'd like to encourage you to evaluate all products on your own. Probably, your use case is quite different from mine. If this is the case, you will see different results. 
+I tried to be objective but I don't know InfluxDB very well so maybe I'm just using it incorrectly. But anyway, I'd like to encourage you to evaluate all products on your own. Probably, your use case is quite different from mine. If this is the case, you will see different results.
