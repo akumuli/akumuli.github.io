@@ -2,11 +2,11 @@
 layout:     post
 title:      Akumuli Markedly Outperforms InfluxDB in Time-Series Data & Metrics Benchmark
 date:       2017-01-24 12:00:00
-summary: Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData doesn't share this judgment so they created the comprehensive test suite and published several articles comparing their product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB.
+summary: Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData don't share this judgment so they created the comprehensive test suite and published several articles comparing their product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB.
 categories: akumuli
 ---
 
-Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData doesn't share this judgment so they created the comprehensive test suite and published several articles comparing their product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB (v1.1.1). I forked this repo and added [Akumuli](https://github.com/akumuli/Akumuli) support. It's available [here](https://github.com/Lazin/influxdb-comparisons). Now I want to share the results and some thoughts about it with you.
+Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData don't share this judgment so they created the comprehensive test suite and published several articles comparing their product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB (v1.1.1). I forked this repo and added [Akumuli](https://github.com/akumuli/Akumuli) support. It's available [here](https://github.com/Lazin/influxdb-comparisons). Now I want to share the results and some thoughts about it with you.
 
 There is a bunch of applications in this test suite (in /cmd dir). There is an app that generates input (one for all databases, you should tell it what database are you working with), the app that generates queries, the bunch of apps that used to load data (one per supported database), and another set of apps that can be used to benchmark each database (one per database as well) using generated queries. 
 
