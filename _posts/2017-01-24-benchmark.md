@@ -2,11 +2,11 @@
 layout:     post
 title:      Akumuli Markedly Outperforms InfluxDB in Time-Series Data & Metrics Benchmark
 date:       2017-01-24 12:00:00
-summary: Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData don't share this judgment so they created the comprehensive test suite and published several articles comparing their product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB.
+summary: Usually, I'm trying to avoid comparisons with other databases. I can't create objective benchmark because I can't unlearn everything that I know about my own product. Most probably, I'll create a biased benchmark that will work great with Akumuli. But fortunately, InfluxData released their own set of benchmarks and published series of articles comparing their product with the competition. I decided to give it a try.
 categories: akumuli
 ---
 
-Usually, I'm trying to avoid comparisons with other databases so nobody can blame me biased. Folks at InfluxData don't share this judgment so they created the comprehensive test suite and published several articles comparing their product with the competition. This test suite is available on GitHub. For me, this looks like an invitation so I decided to use it to compare Akumuli with InfluxDB (v1.1.1). I forked this repo and added [Akumuli](https://github.com/akumuli/Akumuli) support. It's available [here](https://github.com/Lazin/influxdb-comparisons). Now I want to share the results and some thoughts about it with you.
+Usually, I'm trying to avoid comparisons with other databases. I can't create objective benchmark because I can't unlearn everything that I know about my own product. Most probably, I'll create a biased benchmark that will work great with [Akumuli](https://github.com/akumuli/Akumuli). But fortunately, InfluxData released their own set of benchmarks and published series of articles [comparing their product with the competition](https://www.influxdata.com/influxdb-markedly-outperforms-opentsdb-in-time-series-data-metrics-benchmark/). I decided to [give it a try](https://github.com/Lazin/influxdb-comparisons).
 
 There is a bunch of applications in this test suite (in /cmd dir). There is an app that generates input (one for all databases, you should tell it what database are you working with), the app that generates queries, the bunch of apps that used to load data (one per supported database), and another set of apps that can be used to benchmark each database (one per database as well) using generated queries. 
 
@@ -39,7 +39,7 @@ But let's look how Akumuli performs here. Akumuli doesn't support fields and tab
 
 ### Write Performance
 
-I've run the tests locally at first, here is [the script](https://github.com/Lazin/influxdb-comparisons/blob/master/cmd/load_data.sh) output:
+I've run the tests locally at first using InfluxDB v1.1.1 and latest version of Akumuli, here is [the script](https://github.com/Lazin/influxdb-comparisons/blob/master/cmd/load_data.sh) output:
 
     $ ./load_data.sh 
     Loading data into Akumuli
@@ -82,8 +82,6 @@ InfluxDB did a great job here. As you can see it uses twice less disk space then
 
     705M    /home/elazin/.akumuli/
     323M    /var/lib/influxdb/
-
-BTW, I don't really believe in x16.5 less disk space claim. I've been using HBase for time-series for some time and I can say that with proper data block encoding and enabled compression it gives decent results.
 
 ### Query Performance
 
