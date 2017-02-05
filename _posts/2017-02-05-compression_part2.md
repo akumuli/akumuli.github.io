@@ -20,7 +20,7 @@ But some numbers will have very small (if any) number of leading zeroes when XOR
 
 So, we need to XOR not any but close values together. To achieve this Akumuli uses predictive coding. The idea is that we can try to predict next value and XOR it with the actual one. Basically, we will store prediction error. The predictor can be stateful, it can store some context information about the predicted signal. The signal usually is not totally random but stationary thus it can be predicted with some accuracy.
 
-[TODO - Picture]
+![Predictor](/images/predictor_schema.png)
 
 If our predictor is good prediction error will be small and we will be able to store it using a small number of bits. But what predictors should be used?
 
