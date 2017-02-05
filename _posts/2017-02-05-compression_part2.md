@@ -25,11 +25,12 @@ So, we need to XOR not any but close values together. To achieve this Akumuli us
 If our predictor is good prediction error will be small and we will be able to store it using a small number of bits. But what predictors should be used?
 
 I've evaluated three predictors:
+
 - Last value predictor. 
 - Finite Context Method (FCM) predictor.
 - Differential FCM predictor.
 
- (Actually, I've evaluated compositions of different predictors, but this is too much for the blog post)
+(Actually, I've evaluated compositions of different predictors, but this is too much for the blog post)
 
 Last value predictor (or delta modulator) assumes that the next value will be the same as the previous one. So, to use this predictor we can just XOR adjacent values of the array and we're done.
 
@@ -65,6 +66,7 @@ Obviously, last value predictor will fail here. Let's define the hash function f
     }
 
 Now let's look how predictor will do its job:
+
 - FCM initialized, table == [0, 0], last_hash == 0;
 - predict_next(fcm) returned 0;
 - update(fcm, -1), table == [-1, 0], last_hash == 1;
@@ -90,6 +92,7 @@ It extracts the sign, exponent, and two mantissa bits out of floating point numb
 DFCM works almost the same as FCM, but it works with differences, not the actual values. 
 
 I created [this script](https://gist.github.com/Lazin/a28ba28b1a51a95e193e13575eef6509) to evaluate different predictors in different situations. It runs different predictors on several classes of input. Some of this classes are:
+
 - Random walk;
 - Steady growth trend;
 - Pattern;
@@ -126,8 +129,6 @@ What if the trend will be random?
 
 ![Random growth](/images/fast_rand_growth.png)
 
-You can see that DFCM still outperforms other predictors but there are some spikes. We definitely will need more space to store this. With integer values result is about the same:
-
-![Random growth int](/images/fast_rand_growth_int.png)
+You can see that DFCM still outperforms other predictors but there are some spikes. We definitely will need more space to store this.
 
 As result, I've chosen DFCM predictor for Akumuli. It performs relatively good on monitoring data as well as scientific data.
