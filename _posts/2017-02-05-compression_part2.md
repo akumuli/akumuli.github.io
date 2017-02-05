@@ -1,3 +1,10 @@
+---
+layout:     post
+title:      Time-series compression (part 2)
+date:       2017-02-05 18:00:00
+summary: Let's talk about floating point data compression. This problem is not new, there are some good papers about it, e.g. [Gorilla paper](http://www.vldb.org/pvldb/vol8/p1816-teller.pdf), and [also this](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.86.262&rep=rep1&type=pdf), and [this one too](https://pdfs.semanticscholar.org/7e8b/0ac17f11dcfd13fea4aadf0b86598f3d1d72.pdf).
+categories: akumuli, compression
+---
 
 Let's talk about floating point data compression. This problem is not new, there are some good papers about it, e.g. [Gorilla paper](http://www.vldb.org/pvldb/vol8/p1816-teller.pdf), and [also this](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.86.262&rep=rep1&type=pdf), and [this one too](https://pdfs.semanticscholar.org/7e8b/0ac17f11dcfd13fea4aadf0b86598f3d1d72.pdf). None of them is a good fit for [Akumuli](https://github.com/akumuli/akumuli) because the algorithms described in these papers are too specialized. The paper authors usually have a very specific dataset in mind. For example, Gorilla is optimized for slowly changed time-series and for integer time-series, and FCM algorithm will work best for scientific data.
 
