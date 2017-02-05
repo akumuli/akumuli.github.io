@@ -36,34 +36,40 @@ Last value predictor (or delta modulator) assumes that the next value will be th
 
 FCM predictor is more complex. It predicts next value based on a finite number of preceding values. FCM predictor contains fixed sized table. This table maps contexts to values that were observed after particular contexts. The data structure is very simple:
 
-    struct FCM {
-      double table[TABLE_SIZE];
-      int last_hash = 0;
-    };
+```c
+struct FCM {
+  double table[TABLE_SIZE];
+  int last_hash = 0;
+};
+```
 
 The `update` procedure should be used to add new values to the table:
 
-    double predict_next(FCM* fcm) {
-      return fcm->table[fcm->last_hash];
-    }   
+```c
+double predict_next(FCM* fcm) {
+  return fcm->table[fcm->last_hash];
+}  
+```
 
 To understand how it works we should know how these values are calculated:
 
-    void update(FCM* fcm, double value) {
-      fcm->table[fcm->last_hash] = value;
-      fcm->last_hash = hash(value) % TABLE_SIZE;
-    }
+```c
+void update(FCM* fcm, double value) {
+  fcm->table[fcm->last_hash] = value;
+  fcm->last_hash = hash(value) % TABLE_SIZE;
+}
+```
 
-To understand how it works we can imagine how FCM predictor of size two will be dealing with this input sequence:
-
-    [-1, 1, -1, 1, -1, 1]
+To understand how it works we can imagine how FCM predictor of size two will be dealing with this input sequence: `[-1, 1, -1, 1, -1, 1]`.
 
 Obviously, last value predictor will fail here. Let's define the hash function first. We need to extract some context from each floating point number, for FCM predictor of size two we can use sign bit:
 
-    int hash(double value) 
-      if (value < 0.0) return 1;
-      return 0;
-    }
+```c
+int hash(double value) 
+  if (value < 0.0) return 1;
+  return 0;
+}
+```
 
 Now let's look how predictor will do its job:
 
@@ -85,7 +91,9 @@ Famous Gorilla paper uses the algorithm that can be seen as a special case of th
 
 In Akumuli I'm using this hash function:
 
-    (last_hash << 5) ^ (value >> 50)
+```c
+(last_hash << 5) ^ (value >> 50)
+```
 
 It extracts the sign, exponent, and two mantissa bits out of floating point number and blends it with some bits from the previous hash value. Blending previous hash bits is very important because it makes context depend on several adjacent values, not only the last.
 
