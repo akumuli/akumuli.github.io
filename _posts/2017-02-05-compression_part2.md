@@ -111,7 +111,7 @@ This class of input is very important because it mimics a stationary process. Th
 
 ![Random walk](/images/random_walk.png)
 
-This graph shows number of bits needed to store each value using different predictors. X axis is a value index and Y axis is a number of bits needed to represent prediction error.
+This graph shows number of bits needed to store each value using different predictors. X axis is a value index and Y axis is a number of bits needed to represent prediction error so, the smaller the value the better compression.
 
 ### Pattern
 
