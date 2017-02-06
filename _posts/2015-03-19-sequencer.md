@@ -6,6 +6,8 @@ summary: Akumuli is a time-series database input for which is supposed to be gen
 categories: akumuli
 ---
 
+NOTE: this article is out of date. Akumuli doesn't use this component anymore.
+
 [Akumuli](http://github.com/Akumuli/akumuli) is a time-series database input for which is supposed to be generated on different machines in the network. Each computer has its own time source that can be used to generate data. Clocks on different machines can be skewed and because of this time-series database input can be slightly unordered. Akumuli's input is an almost sorted dataset. Because of this akumuli has a sequencer component. Sequencer is used to buffer and sort input on the fly. It is some sort of cache and sorting algorithm in one package. In this article I'll try to describe how it works.
 
 Akumuli has a notion of the sliding window. Each data element has a timestamp. If some data element's timestamp doesn't fit into the sliding window this data element is old and most likely was created by error. Akumuli only accepts data elements from not too far future and not too far past.  Width of the sliding window is defined in configuration. Sequencer stores data that fits the sliding window. When data element gets too old and leaves sliding window, sequencer writes it to the disk and removes it from main memory.
