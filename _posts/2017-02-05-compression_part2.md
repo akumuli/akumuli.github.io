@@ -139,4 +139,9 @@ What if the trend will be random?
 
 You can see that DFCM still outperforms other predictors but there are some spikes. We definitely will need more space to store this.
 
-As result, I've chosen DFCM predictor for Akumuli. It performs relatively good on monitoring data as well as scientific data.
+### Final thoughts
+
+As result of this evaluation, I've chosen DFCM predictor for Akumuli. It performs relatively good on monitoring data as well as scientific data.
+You can see that compression ratio depends on dataset heavily and predictive compression algorithm do make a difference in some cases.
+This article covers only small part of the algorithm, but you can check this [design document](https://docs.google.com/document/d/1yLsN1j8xxnm_b0oN6rFSgWOnCHP-OlJC5pBKZQwTAPc/pub) for more details.
+
