@@ -35,6 +35,6 @@ Storage in Akumuli is based on append-only B+tree. Each series is represented us
 
 The write-path code is based on the observation that different TCP-sessions usually write data to the different time-series. When session writes something to the series first time the corresponding B+tree that stores series data get assigned to that session. After that, the session will be able to write data to this series without any synchronization. If B+tree is already owned by another thread, additional synchronization will be needed. 
 
-# Final notes
+### Final notes
 
 Using a single-node instance of Akumuli running on the m3.2xlarge instance I managed to write 4.5M data points / second. This is not a high-end machine by any means. I'm looking forward to running this test on more performant hardware and see the results. That would be very interesting to try.
