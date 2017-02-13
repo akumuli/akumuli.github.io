@@ -2,11 +2,11 @@
 layout:     post
 title:      Understanding Akumuli Performance
 date:       2017-02-13 18:00:00
-summary: Akumuli is designed to be a blazingly fast database with a small footprint on the system. I'm taking performance really seriously and will consider any performance drop between versions as a bug. But how fast is it actually?
+summary: Akumuli was designed with performance in mind from the very beginning. The project page mentions that ingestion throughput is somewhere around 1M data points per second. But one can ask, what level of performance is achievable on today's hardware exactly? This is a good question to ask.
 categories: akumuli
 ---
 
-Akumuli is designed to be a blazingly fast database with a small footprint on the system. I'm taking performance really seriously and will consider any performance drop between versions as a bug. But how fast is it actually?
+Akumuli was designed with performance in mind from the very beginning. The [project page mentions](https://github.com/akumuli/Akumuli) that ingestion throughput is somewhere around 1M data points per second. But one can ask, what level of performance is achievable on today's hardware exactly? This is a good question to ask.
 
 To answer this question I've benchmarked Akumuli on AWS and it managed to sustain 4.5 million write operations per second on a dedicated m3.2xlarge node. This isn't a peak but steady write throughput. And my tests showed that it scales almost linearly on a multicore machine.
 
