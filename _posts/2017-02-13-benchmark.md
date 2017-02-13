@@ -25,6 +25,8 @@ Akumuli has a configuration option that called `TCP.pool_size`. It controls the 
 The input is constructed using [this script](https://github.com/akumuli/test_input_generator). All test data was generated beforehand and resides in eight archives. Each archive has 86401000 data elements. All eight archives had around 691M data elements (3.5G compressed).
 I started Akumuli with different `pool_size` values and measured the time it took to write all the data. After each run, the resulting database size was 2.7GB (4.2 bytes per element).
 
+Single `m3.xlarge` instance has been used to generate load. I started 8 writer processes, each with its own set of series.
+
 ### What makes Akumuli so fast?
 
 Storage in Akumuli is based on append-only B+tree. Each series is represented using a separate B+tree instance and can be modified independently, without any synchronization. The only moment when synchronization is needed is when individual pages get committed to disk because all trees reside in the same file.
