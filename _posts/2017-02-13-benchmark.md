@@ -18,9 +18,9 @@ Akumuli has a configuration option that called `TCP.pool_size`. It controls the 
 
 | Number of threads | Throughput datapoints/sec |
 |-------------------|---------------------------|
-|1                      | 693984|
-|4                      | 2433831|
-|8                      | 4547421|
+|1                      | 693 984|
+|4                      | 2 433 831|
+|8                      | 4 547 421|
 
 The input is constructed using [this script](https://github.com/akumuli/test_input_generator). All test data was generated beforehand and resides in eight archives. Each archive has 86401000 data elements. All eight archives had around 691M data elements (3.5G compressed).
 I started Akumuli with different `pool_size` values and measured the time it took to write all the data. After each run, the resulting database size was 2.7GB (4.2 bytes per element).
