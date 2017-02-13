@@ -12,7 +12,7 @@ To answer this question I've benchmarked Akumuli on AWS and it managed to sustai
 
 ![Akumuli benchmark results on AWS m3.2xlarge instance](/images/benchmark_bar_plot.png)
 
-### Test aproach 
+### Methodology
 
 Akumuli has a configuration option that called `TCP.pool_size`. It controls the server side parallelism. By default, this option is equal to one. But it can be increased to take an advantage when running on the multicore machine. I ran the benchmark with different numbers on the eight core machine and here are the results:
 
