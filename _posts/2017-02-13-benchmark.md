@@ -2,11 +2,11 @@
 layout:     post
 title:      Understanding Akumuli Performance
 date:       2017-02-13 18:00:00
-summary: Akumuli was designed with performance in mind from the very beginning. I set the lower bound for the write throughput at the 1M writes/second as one of the project goals. Every version so far delivers this performance, that's why this number is mentioned on the project page. But this is only a lower bound. It would be interesting to see what level of performance is achievable with today's hardware!
+summary: Akumuli was designed with performance in mind from the very beginning. I set the lower bound for the write throughput at the 1M writes/second level as one of the project goals. Every version so far delivers this performance, that's why this number is mentioned on the project page. But this is only a lower bound. It would be interesting to see what level of performance is achievable with today's hardware!
 categories: akumuli
 ---
 
-Akumuli was designed with performance in mind from the very beginning. I set the lower bound for the write throughput at the 1M writes/second as one of the project goals. Every version so far delivers this performance, that's why this number is mentioned on the [project page](https://github.com/akumuli/Akumuli). But this is only a lower bound. It would be interesting to see what level of performance is achievable with today's hardware!
+Akumuli was designed with performance in mind from the very beginning. I set the lower bound for the write throughput at the 1M writes/second level as one of the project goals. Every version so far delivers this performance, that's why this number is mentioned on the [project page](https://github.com/akumuli/Akumuli). But this is only a lower bound. It would be interesting to see what level of performance is achievable with today's hardware!
 
 To answer this question I tested Akumuli on AWS and it managed to sustain 4.5 million write operations per second on a dedicated m3.2xlarge node. This isn't a peak but steady write throughput over the network. And my tests showed that it scales almost linearly on a multicore machine.
 
