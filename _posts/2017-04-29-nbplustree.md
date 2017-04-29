@@ -2,7 +2,7 @@
 layout:     post
 title:      Storage engine
 date:       2017-04-29 18:00:00
-summary: Recently I tested Akumulil on the m3.2xlarge EC2 instance. Write throughput was ...
+summary: In time-series databases the querying pattern is different from write pattern. We usually write data in time order by updating many series every second. But querying is a different story. We usually want to read only a handful of series leaving most of the data ...
 categories: akumuli
 ---
 
