@@ -35,7 +35,7 @@ Each NB+tree instance is a series of extents, each extent is a B+tree instance.
 
 Each extent can be seen as a single inner node that stores references to extents of the previous level (e.g. level 3 extent is a single inner node that stores references to level 2 extents, level 2 extent is a single inner node that stores references to level 1 extents/leaf nodes). This property allows us to build extents easily.
 
-![Fig 1](/images/NBTreeExtents_no_shadow.png)
+![Fig 1](/images/NBtreeExtents_no_shadow.png)
 
 The picture shows B+trees with fan-out ratio of 4 but real B+tree used by Akumuli have fan-out ratio of 32. Note that each B+tree can be incomplete only from the right.
 
