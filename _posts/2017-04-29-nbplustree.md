@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Storage engine
+title:      Storage engine design
 date:       2017-04-29 18:00:00
 summary: In time-series databases the querying pattern is different from write pattern. We usually write data in time order by updating many series every second. But querying is a different story. We usually want to read only a handful of series leaving most of the data ...
 categories: akumuli
@@ -63,4 +63,4 @@ Here come the advantages of the NB+tree over the LSM-tree:
 
 This data-structure allows Akumuli to maintain separate NB+tree instance for every time-series in the database. The main disadvantage of this design is a complexity of the crash recovery process. It’s impossible to maintain WAL or command log per NB+tree instance. Akumuli uses a different approach to crash recovery that’s not discussed in this article but you can find [more details about it in this article](https://docs.google.com/document/d/1jFK8E3CZSqR5IPsMGojm2LknkNyUZA7tY51N6IgzW_g/pub).
 
-Ability to build separate NB+tree instance for every time-series is truly important. It enables queries in column-oriented fashion and, at the same time, it enables really fast parallel writes with very small write amplification. My recent experiment showed that it can write about 16 million data points per second on a c3.8xlarge instance. 
+Ability to build separate NB+tree instance for every time-series is truly important. It enables queries in column-oriented fashion and, at the same time, it enables really fast parallel writes with very small write amplification. My recent experiment showed that it can write about [16 million data points per second on a c3.8xlarge instance](http://akumuli.org/akumuli/2017/03/10/benchmark2/). 
