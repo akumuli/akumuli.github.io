@@ -59,7 +59,7 @@ Here come the advantages of the NB+tree over the LSM-tree:
 - Merge is very efficient. It’s enough to just add an address of the root node of the one extent to the other extent; No need to read the data and actually merge anything.
 - We can store some information inside inner nodes to speed up aggregation and resampling of the time-series without maintaining some external data-structures (rollups) or indexes.
 - Parallel operation. It is possible to write to the database from many writer threads (and Akumuli is doing this).
-- Good for modern SSDs. All writes are aligned and performed in parallel.
+- Good for modern SSDs. All writes are aligned and performed in parallel. All tree nodes have the same size.
 
 This data-structure allows Akumuli to maintain separate NB+tree instance for every time-series in the database. The main disadvantage of this design is a complexity of the crash recovery process. It’s impossible to maintain WAL or command log per NB+tree instance. Akumuli uses a different approach to crash recovery that’s not discussed in this article but you can find [more details about it in this article](https://docs.google.com/document/d/1jFK8E3CZSqR5IPsMGojm2LknkNyUZA7tY51N6IgzW_g/pub).
 
