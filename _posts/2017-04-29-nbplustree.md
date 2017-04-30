@@ -61,6 +61,6 @@ Here come the advantages of the NB+tree over the LSM-tree:
 - Parallel operation. It is possible to write to the database from many writer threads (and Akumuli is doing this).
 - Good for modern SSDs. All writes are aligned and performed in parallel.
 
-This data-structure allows Akumuli to maintain separate NB+tree instance for every time-series in the database. The main disadvantage of this design is a complexity of the crash recovery process. It’s impossible to maintain WAL or command log per NB+tree instance. Akumuli uses a different approach to crash recovery that’s not discussed in this article.
+This data-structure allows Akumuli to maintain separate NB+tree instance for every time-series in the database. The main disadvantage of this design is a complexity of the crash recovery process. It’s impossible to maintain WAL or command log per NB+tree instance. Akumuli uses a different approach to crash recovery that’s not discussed in this article but you can find [more details about it in this article](https://docs.google.com/document/d/1jFK8E3CZSqR5IPsMGojm2LknkNyUZA7tY51N6IgzW_g/pub).
 
 Ability to build separate NB+tree instance for every time-series is truly important. It enables queries in column-oriented fashion and, at the same time, it enables really fast parallel writes with very small write amplification. My recent experiment showed that it can write about 16 million data points per second on a c3.8xlarge instance. 
