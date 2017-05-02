@@ -10,7 +10,7 @@ In time-series databases the querying pattern is different from write pattern. W
 
 Some other TSDBs are using [LSM-tree](https://en.wikipedia.org/wiki/Log-structured_merge-tree) or similar structures. In this databases, the LSM-tree partitions the key space in the time dimension and the data points are stored in chunks in some sort of column-oriented format that allows locating individual series quickly. Each chunk stores data points from many series (not necessary from all of them). This design leads to high read amplification because it’s impossible to read only the data we need without reading and decompressing all the other data in the chunk. Another problem is that data in the chunk is not aligned. This is a fundamental limitation, the data of the individual series in the chunk can’t be properly aligned by block boundary because everything is partitioned by time.
 
-Akumuli’s goal is to maintain separate disk backed data structure for each series in the database to minimize read amplification. This is not feasible with LSM-trees for many reasons:
+Akumuli’s goal is to maintain separate disk backed data structure for each series in the database and to make everything aligned on a page-sized boundary to minimize read amplification. This is not feasible with LSM-trees for many reasons:
 
 - LSM tree needs a lot of RAM for memory resident part to be able to batch up many values into one large write operation.
 - High write amplification. Each data element gets written to disk several times. When dealing with time-series data this seemed to be unnecessary because most of the data is never changed.
