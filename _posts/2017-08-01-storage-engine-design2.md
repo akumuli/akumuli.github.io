@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Why not LSM-tree?
+title:      Mechanical Sympathy
 date:       2017-08-01 13:00:00
 summary:  In the previous article, I wrote about one of the main disadvantages of the LSM-tree based design for the time-series database. LSM-tree is good when you have...
 categories: akumuli
@@ -8,7 +8,7 @@ categories: akumuli
 
 In the previous article, I wrote about one of the main disadvantages of the LSM-tree based design for the time-series database. LSM-tree is good when you have one big key-space, but when you have many small key-spaces (many time-series) it quickly becomes wasteful. In this article, I want to tell about another problem, the bandwidth exhaustion.
 
-### Algorithm
+### An Algorithm
 
 LSM-tree was designed for the world where the sequential read and write throughput was high and the random read and write throughput was low. In a nutshell, it trades increased I/O bandwidth use with reduced random I/O. LSM-tree is composed of several components (C0, C1, ..., CK). The C0 component is usually kept in memory, new records are added to the C0 component until it gets full. When this happens the C0 component can be sorted by key and written to disk into C1 component. The C1 components can be merged into C2 components and so on.
 
