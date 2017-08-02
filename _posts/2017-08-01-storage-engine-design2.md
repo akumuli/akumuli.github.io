@@ -10,7 +10,7 @@ In the [previous article](http://akumuli.org/akumuli/2017/04/29/nbplustree/), I 
 
 ### A shallow introduction into the LSM-tree algorithm
 
-LSM-tree was designed for the world where the sequential read and write throughput was relatively high and the random read and write throughput was relatively low. In a nutshell, it trades increased I/O bandwidth use with reduced random I/O. LSM-tree is composed of several components (C0, C1, ..., CK). The C0 component is usually kept in memory, new records are added to the C0 component until it gets full. When this happens the C0 component can be sorted by key and written to disk into C1 component. The C1 components can be merged into C2 components and so on.
+LSM-tree was designed for the world where the sequential read and write throughput was relatively high and the random read and write throughput was relatively low. In a nutshell, it trades increased I/O bandwidth use for reduced random I/O. LSM-tree is composed of several components (C0, C1, ..., CK). The C0 component is usually kept in memory, new records are added to the C0 component until it gets full. When this happens the C0 component can be sorted by key and written to disk into C1 component. The C1 components can be merged into C2 components and so on.
 
 ![Fig 1](/images/media-20170801.png)
 
