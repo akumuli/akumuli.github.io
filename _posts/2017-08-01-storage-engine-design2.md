@@ -6,7 +6,7 @@ summary:  In the previous article, I wrote about the reasons that made me choose
 categories: akumuli
 ---
 
-In the [previous article](http://akumuli.org/akumuli/2017/04/29/nbplustree/), I wrote about the reasons that made me choose B+tree based data-structure for Akumuli. In this article, I want to tell about another advantage of the B+tree based design compared to LSM-tree.
+In the previous article, I wrote about the reasons that made me choose B+tree based data-structure for [Akumuli](https://github.com/akumuli/Akumuli). In this article, I want to tell about another advantage of the B+tree based design compared to LSM-tree.
 
 ### A shallow introduction into the LSM-tree algorithm
 
