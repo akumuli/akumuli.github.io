@@ -5,7 +5,7 @@ permalink: /about/
 
 **Akumuli** is a time-series database. The word "akumuli" can be translated from esperanto as "accumulate".
 
-###Rationale
+### Rationale
 
 Most open source projects focus on query language and things useful for web-analytics, but they ignore some key characteristics of time series data:
 
@@ -15,7 +15,7 @@ Most open source projects focus on query language and things useful for web-anal
 * Periodic time-series can be compressed very efficiently
 * Compression is crucial for time-series storage!
 
-###Features
+### Features
 
 * Implements specialized storage engine for time-series data
 * Memory mapped and x64 only
@@ -26,7 +26,7 @@ Most open source projects focus on query language and things useful for web-anal
 * Compressed (specialized compression algorithms for different data elements - timestamps, ids, values)
 * Easy to use server software (based on Redis protocol)
  
-###Documentation
+### Documentation
 
 * [Wiki](https://github.com/akumuli/Akumuli/wiki)
 * [Getting started](https://github.com/akumuli/Akumuli/wiki/Getting-started)
