@@ -33,9 +33,9 @@ In this example, the time interval spans over nodes 10, 11, 12, and 13. To calcu
 
 In the more complex scenario, the interval will span a fractional number of leaf nodes. The beginning and the end of the interval will be located in the middle of the corresponding leaf nodes. But here we may use divide and conquer approach. We can split the task into three parts:
 
-1) Read the first page that partially crosses the time-interval. This will read the actual leaf node from disk, decompress it and compute `max` for every data-point that sits inside the interval.
-2) Compute the `max` for the subtrees that sits inside the interval entirely, as described above.
-3) Read the last page that partially crosses the time-interval, as in 1).
+1. Read the first page that partially crosses the time-interval. This will read the actual leaf node from disk, decompress it and compute `max` for every data-point that sits inside the interval.
+2. Compute the `max` for the subtrees that sits inside the interval entirely, as described above.
+3. Read the last page that partially crosses the time-interval, as in 1).
 
 After that, we can compute final result by composing three `max` values (we should just get the largest one).
 
@@ -43,9 +43,9 @@ After that, we can compute final result by composing three `max` values (we shou
 
 For instance, let’s look at figure 2.
 
-1) First, we need to read page 9 (by following the path 1->2->4) and find the `max` value.
-2) After that, we need to compute the `max` value in pages 10..13 by using pages 2 and 3 (the same way as in the previous example).
-3) And finally, we need to read page 14 (by following the 1->3->7 path) and find the `max` value.
+1. First, we need to read page 9 (by following the path 1->2->4) and find the `max` value.
+2. After that, we need to compute the `max` value in pages 10..13 by using pages 2 and 3 (the same way as in the previous example).
+3. And finally, we need to read page 14 (by following the 1->3->7 path) and find the `max` value.
 
 ## Downsampling
 
