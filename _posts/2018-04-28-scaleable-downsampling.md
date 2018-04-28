@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Scaling TSDB-specific operations
-date:       2017-04-28 12:00:00
+date:       2018-04-28 12:00:00
 summary:  The point of using a specialized time-series database is to have an edge over conventional databases in time-series specific operations. Most often, TSDB's are judged by their write speed. In my opinion, the read performance is as important if not the most. Moreover, not only plain reads but...
 categories: akumuli
 ---
