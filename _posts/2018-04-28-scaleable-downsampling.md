@@ -2,7 +2,7 @@
 layout:     post
 title:      Scaling TSDB-specific operations
 date:       2017-04-28 12:00:00
-summary:  Tag support is very important for any modern time-series database. The world from which time-series data is coming is complex. Time-series data is not just a time-ordered values (measurements), this time ordered values form individual series...
+summary:  The point of using a specialized time-series database is to have an edge over conventional databases in time-series specific operations. Most often, TSDB's are judged by their write speed. In my opinion, the read performance is as important if not the most. Moreover, not only plain reads but...
 categories: akumuli
 ---
 
