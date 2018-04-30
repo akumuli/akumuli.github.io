@@ -7,3 +7,23 @@
 @import "basscss";
 @import "main";
 @import "solarized-light";
+
+
+.landing {
+    all: initial;
+    * {
+        all: unset;
+    }
+}
+
+.column {
+    float: left;
+    width: 25%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
