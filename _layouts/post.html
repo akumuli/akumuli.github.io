@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: blog
 ---
 
 {% assign minutes = content | number_of_words | divided_by: 180 %}
@@ -7,22 +7,28 @@ layout: default
 {% assign minutes = 1 %}
 {% endif %}
 
-<div class="post-header mb2">
-  <h1>{{ page.title }}</h1>
-  <span class="post-meta">{{ page.date | date: "%b %-d, %Y" }}</span><br>
-  {% if page.update_date %}
-    <span class="post-meta">Updated: {{ page.update_date | date: "%b %-d, %Y" }}</span><br>
-  {% endif %}
-  <span class="post-meta small">{{ minutes }} minute read</span>
+
+<div class="blog-title">
+  <div class="row">
+    <div class="col-lg-8 mx-auto text-center">
+      <h2 class="section-heading">{{ page.title }}</h2>
+      <span class="post-meta">{{ page.date | date: "%b %-d, %Y" }}</span><br>
+      <span class="post-meta small">{{ minutes }} minute read</span>
+      <hr class="my-4">
+    </div>
+  </div>
 </div>
 
-<article class="post-content">
-  {{ content }}
-</article>
-
-{% if site.show_post_footers %}
-  {% include post_footer.html %}
-{% endif %}
+<section id="post-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-2 left-margin">
+      </div>
+      <div class="col-sm-8 blog-main">
+      {{ content }}
+      </div>
+  </div>
+</section>
 
 <div id="disqus_thread"></div>
 <script type="text/javascript">
