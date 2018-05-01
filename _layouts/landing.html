@@ -16,7 +16,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
@@ -97,7 +97,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto text-center">
-            <h2 class="section-heading">Akumuli Timeseries Database</h2>
+            <h2 class="section-heading">Akumuli Time Series Database</h2>
             <hr class="my-4">
             <p class="mb-5">
               Akumuli is an open source Time Series Database available under 
@@ -118,12 +118,45 @@
     <section id="features">
       <div class="container">
         <div class="row">
-          <div class="col-lg-12 text-center">
-            <h2 class="section-heading">Features</h2>
+          <div class="col-sm-4 mx-auto text-left">
+            <h2 class="section-heading text-center">Write</h2>
             <hr class="my-4">
+            <p class="mb-5">
+                Up to ~14 million writes per second on 32-core server.
+                <br/><br/>
+                Data ingestion is parallelized and optimized for SSD/NVMe.
+                <br/><br/>
+                State of the art compression, ~1GB/s encoding throughput 
+                per core.
+            </p>
+          </div>
+          <div class="col-sm-8 mx-auto text-left">
+              <img src="./images/32corerun.png" class="img-fluid z-depth-5 rounded">
           </div>
         </div>
+        <br/><br/>
+        <br/><br/>
+        <div class="row">
+          <div class="col-sm-8 mx-auto text-left">
+              <img src="./images/grafana-screen.png"/>
+          </div>
+          <div class="col-sm-4 mx-auto text-left">
+            <h2 class="section-heading text-center">Read</h2>
+            <hr class="my-4">
+            <p class="mb-5">
+              Column-oriented format.
+              <br/><br/>
+              Fast downsampling without pre-configured rollups.
+              <br/><br/>
+              Suitable for interactive applications.
+              <br/><br/>
+            </p>
+          </div>
+        </div>
+        <br/><br/>
+        <br/><br/>
       </div>
+
       <div class="container">
         <div class="row">
           <div class="col-lg-3 col-md-6 text-center">
@@ -131,33 +164,34 @@
               <i class="fa fa-4x fa-database text-primary mb-3 sr-icons"></i>
               <h3 class="mb-3">Storage</h3>
               <p class="text-muted mb-0">
-                Column-oriented.
-                SSD/NVMe optimized.
-                Crash safety and recovery.
-                State of the art compression, ~1GB/s encoding throughput.
+                  Specialized<br/>
+                  Based on B+tree<br/>
+                  Crash safe<br/>
+                  Space constrained<br/>
               </p>
             </div>
           </div>
           <div class="col-lg-3 col-md-6 text-center">
             <div class="service-box mt-5 mx-auto">
-              <i class="fa fa-4x fa-paper-plane text-primary mb-3 sr-icons"></i>
+              <i class="fa fa-4x fa-stopwatch text-primary mb-3 sr-icons"></i>
               <h3 class="mb-3">Performance</h3>
               <p class="text-muted mb-0">
-                Up to ~14 million writes per second on server.
-                Up to ~1 million writes per second on cheap VM.
-                Low latency reads.
+                  Written in C++<br/>
+                  Small memory footprint<br/>
+                  Multi-threaded<br/>
+                  SSD/NVMe optimized<br/>
               </p>
             </div>
           </div>
           <div class="col-lg-3 col-md-6 text-center">
             <div class="service-box mt-5 mx-auto">
-              <i class="fa fa-4x fa-bar-chart text-primary mb-3 sr-icons"></i>
-              <h3 class="mb-3">Features</h3>
+              <i class="fa fa-4x fa-key text-primary mb-3 sr-icons"></i>
+              <h3 class="mb-3">Queries</h3>
               <p class="text-muted mb-0">
-                Fast aggregation, downsampling, and filtering without 
-                pre-computed rollups or materialized views.
-                Hard limit on disk use.
-                Can be used as an embedded library.
+                  Downsample<br/>
+                  Filter<br/>
+                  Aggregate<br/>
+                  Join<br/>
               </p>
             </div>
           </div>
@@ -166,8 +200,8 @@
               <i class="fa fa-4x fa-share text-primary mb-3 sr-icons"></i>
               <h3 class="mb-3">Integrations</h3>
               <p class="text-muted mb-0">
-                  Grafana plugin.
-                  Collectors via the OpenTSDB protocol.
+                  Grafana plugin<br/>
+                  Collectors via the OpenTSDB protocol<br/>
               </p>
             </div>
           </div>
@@ -186,19 +220,20 @@
       </div>
       <div class="container">
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-4 text-center">
             <h4>Ubuntu PPA</h4>
-            Package cloud 
-            <a href=" https://packagecloud.io/Lazin/Akumuli">repository</a>
+            <a href=" https://packagecloud.io/Lazin/Akumuli">
+            <img src="./packagecloud.svg"></a>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-4 text-center">
+            <h4>Grafana Plugin</h4>
+            <a href="https://github.com/akumuli/akumuli-datasource/">
+            <img src="./grafana_icon.svg"></a>
+          </div>
+          <div class="col-sm-4 text-center">
             <h4>Docker images</h4>
-            Docker hub repository
-            <a href="https://hub.docker.com/r/akumuli/akumuli/">repository</a>
-          </div>
-          <div class="col-sm-4">
-            <h4>Windows installer</h4>
-            Comming soon
+            <a href="https://hub.docker.com/r/akumuli/akumuli/">
+            <img src="./Docker.svg"></a>
           </div>
         </div>
       </div>
