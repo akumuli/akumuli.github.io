@@ -14,7 +14,7 @@ The problem with this approach is that the user must know in advance, what rollu
 
 Another often ignored problem is that not all aggregations are composable. For instance, if you have averages with the 5-minute step but you need averages with 1-hour step you can't just use these first 5-minute averages to compute the result. You need to compute it from raw data or you will get an incorrect result.
 
-The final downside is the cardinality growth. Most modern TSDB’s struggles with high cardinality dataset (the ones that have a lot of unique time-series).
+The final downside is the cardinality growth. Most modern TSDB’s struggles with high cardinality datasets (the ones that have a lot of unique time-series).
 
 Akumuli solves this problem by resampling/aggregating the data on the fly. It uses some tricks to make this fast.
 
@@ -51,26 +51,27 @@ For instance, let’s look at figure 2.
 
 First of all, ‘group-aggregate’ query in Akumuli is not supposed to outperform pre-computed rollups. It supposed to be used in conjunction with Grafana and similar interactive tools. Because of this, some assumptions have to be made. Let’s state that the user usually reads the same number of data points with varying step and interval. This makes perfect sense for Grafana. If the size of the graph doesn’t change Grahana will vary the step and time interval in such way the number of points will be about the same. For instance, if the interval is 30 minutes, the step will be 1 second, but if the interval is 3 hours the step will be increased to 6 seconds or so. In both cases, the database should return about the same number of points.
 
-Let’s look at naive approach first. The naive algorithm scans the series from and calculates the downsampled series. For small steps, it’s a pretty good algorithm. But when the step becomes larger the amount of I/O needed growth linearly.
+Let’s look at naive approach first. The naive algorithm scans the series and calculates the downsampled series. For small steps, it’s a pretty good algorithm. But when the step becomes larger the amount of I/O needed growth linearly.
 
-The optimized version utilizes aggregation as a subroutine. For every step interval, we should compute an aggregate. It’s done using the algorithm described above. The only trick is that the step 3) of the first interval and step 1) of the next step are combined. This algorithm requires the same amount of I/O as naive algorithm if the step is small. But the amount of I/O operations wouldn’t grow linearly. It has an upper bound that depends on the number of extracted data-points.
+The optimized version utilizes aggregation as a subroutine. For every step interval, we should compute an aggregate. It’s done using the algorithm described above. The only trick is that the step 3) of the first interval and step 1) of the next step are combined. This algorithm requires the same amount of I/O as naive algorithm if the step is small. But the amount of I/O operations wouldn’t grow linearly. It have an upper bound that depends on the number of extracted data-points.
 
 ![Fig 3 - Note that there is only two links per node. Real code uses fan out ratio of 32 that makes it really hard to draw](/images/downsampling.svg)
 
 Let’s perform some back of the envelope calculations. Let’s state that 1 block always has 1300 data points with 1-second step (around 3 bytes per data-point) and the query should return 400 data-points. 
 
-|         |1 sec|10 sec|30 sec|1 min|5 min|10 min|30 min|1 hour|12 hour|1 day|
-|---------|-----|------|------|-----|-----|------|------|------|-------|-----|
-|Optimized|  4KB|  13KB|	37KB| 74KB|370KB|	739KB| 1.5MB| 1.5MB|  1.5MB|1.5MB|
-|Naive    |  4KB|  13KB|	37KB| 74KB|370KB|	739KB| 2.1MB|	4.3MB|   52MB|104MB|
+|         |1 sec|30 sec|5 min|30 min| 1 hour|12 hour|1 day|
+|---------|-----|------|-----|------|-------|-------|-----|
+|Optimized|  4KB|  37KB|370KB| 1.5MB|  1.5MB|  1.5MB|1.5MB|
+|Naive    |  4KB|	 37KB|370KB| 2.1MB|	 4.3MB|   52MB|104MB|
 
 ![Fig 4](/images/downsampl-perf-chart.png)
 
-The naive approach will require the database to read around 12KB if the step is 10 seconds but if the step is 1-day the algorithm will read more than 100MB of data from disk. For the same query, the algorithm used by Akumuli will read only about 1.5MB. This is quite expensive compared to the rollup query. But on the other hand, it’s comparable with simple image download from a server.
+The naive approach will require the database to read around 37KB if the step is 30-seconds but if the step is 1-day the algorithm will read more than 100MB of data from disk. For the same query, the algorithm used by Akumuli will read only about 1.5MB. This is quite expensive compared to the rollup query. But on the other hand, it’s comparable with simple image download from a server.
 
 ## Filtering
 
 Akumuli also supports `filter` statement that can be added to `select`, `join`, and `group-aggregate` queries. This statement allows filtering time-series by value. This operation also utilizes pre-computed aggregates stored inside the B+tree nodes. The optimization is pretty simple. As the algorithm traverses the tree it may check does the link has any values that match the filter. If the subtree doesn't have any it can be omitted. For instance, if we filtering out all values below 100 and the link to subtree has `max=90` than we can safely prune the subtree from the search.
+
 This approach works really well if we need to filter out everything but outliers. For instance, if no data point matches the filter the query will touch only root node of the tree. If all data points that match the filter are located in one leaf-node, the query will load only a couple of nodes. It will start from the root node and will follow the path until it reaches the leaf-node that has all the data we need.
 
 ## Conslusions
