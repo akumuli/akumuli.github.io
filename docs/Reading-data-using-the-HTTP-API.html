@@ -1,0 +1,541 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Query language reference &mdash; Akumuli 0.7.48 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.7.48',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Akumuli 0.7.48 documentation" href="Root.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="query-language-reference">
+<span id="query-language-reference"></span><h1>Query language reference<a class="headerlink" href="#query-language-reference" title="Permalink to this headline">¶</a></h1>
+<p>The API endpoint is <code class="docutils literal"><span class="pre">http://&lt;host&gt;:&lt;http_port&gt;/api/query</span></code>, e.g. <code class="docutils literal"><span class="pre">http://localhost:8181/api/query</span></code>.</p>
+<p>To retrieve information from Akumuli you should send HTTP POST query. Post data should contain JSON query.
+This section describes JSON query format. Data returned using chunked transfer encoding (because query result
+in Akumuli can be huge or infinite). Depending on the query result can be returned in RESP or in CSV format.</p>
+<p>There are five types of queries: metadata query, select, aggregate, group-aggregate, and join.</p>
+<div class="section" id="series-names">
+<span id="series-names"></span><h2>Series Names<a class="headerlink" href="#series-names" title="Permalink to this headline">¶</a></h2>
+<p>Series name is a combination of metric name and tags. Metric can be thought as unit of measure of the time-series, e.g. <code class="docutils literal"><span class="pre">cpu_user</span></code>, <code class="docutils literal"><span class="pre">mem_commit_mb</span></code>, <code class="docutils literal"><span class="pre">voltage</span></code>, etc. Tags, on the other hand, can be viewed as a unique identifier of the object that is monitored, e.g. if you&#8217;re measuring the performance of the machines in the network you can use tag <code class="docutils literal"><span class="pre">host=$particular_machine_host</span></code> to distinguish between machines.
+If you&#8217;re measuring different properties of some object, you will have set of series with the same set of tags and different metrics, e.g. <code class="docutils literal"><span class="pre">cpu_user</span> <span class="pre">host=192.168.10.22</span></code>, <code class="docutils literal"><span class="pre">cpu_system</span> <span class="pre">host=192.168.10.22</span></code>, and <code class="docutils literal"><span class="pre">mem_commit_mb</span> <span class="pre">host=192.168.10.22</span></code>, all correspond to the same host.</p>
+<p>Metric names and tag names and value can&#8217;t contain spaces, &#8216;:&#8217;, &#8216;=&#8217;, and &#8216;|&#8217; symbols.</p>
+</div>
+<div class="section" id="metadata-query">
+<span id="metadata-query"></span><h2>Metadata Query<a class="headerlink" href="#metadata-query" title="Permalink to this headline">¶</a></h2>
+<p>Metadata query can be used to retrieve information about series. Only series names can be retrieved at the
+moment.</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;meta:names&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will return the list of all series names. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">cpu</span> <span class="n">host</span><span class="o">=</span><span class="n">Foo</span>
+<span class="o">+</span><span class="n">cpu</span> <span class="n">host</span><span class="o">=</span><span class="n">Bar</span>
+<span class="o">+</span><span class="n">cpu</span> <span class="n">host</span><span class="o">=</span><span class="n">Buz</span>
+</pre></div>
+</div>
+<p>By default results returned in RESP format. This can be altered using &#8220;output&#8221; field (this field can be used with other types of queries).</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;meta:names&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;output&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;csv&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will return the list of all series names in CSV format:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">cpu</span> <span class="n">host</span><span class="o">=</span><span class="n">Foo</span>
+<span class="n">cpu</span> <span class="n">host</span><span class="o">=</span><span class="n">Bar</span>
+<span class="n">cpu</span> <span class="n">host</span><span class="o">=</span><span class="n">Buz</span>
+</pre></div>
+</div>
+<p>This list can be filtered by specifying metric and <code class="docutils literal"><span class="pre">where</span></code> statement.
+Note that &#8220;where&#8221; can&#8217;t be used without a metric.</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;meta:names:cpu&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;where&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="s2">&quot;Bar&quot;</span><span class="p">]</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will return the list of all series that matches search predicate (Buz is filtered out):</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">cpu</span> <span class="n">host</span><span class="o">=</span><span class="n">Foo</span>
+<span class="o">+</span><span class="n">cpu</span> <span class="n">host</span><span class="o">=</span><span class="n">Bar</span>
+</pre></div>
+</div>
+<p>Note that you can filter by metric without using <code class="docutils literal"><span class="pre">where</span></code> statement:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;meta:names:mem&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This query will return names of all series with <code class="docutils literal"><span class="pre">mem</span></code> metric.</p>
+</div>
+<div class="section" id="select-query">
+<span id="select-query"></span><h2>Select Query<a class="headerlink" href="#select-query" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">Select</span></code> query can be used to retrieve results by metric name, <code class="docutils literal"><span class="pre">select</span></code> field is mandatory and can&#8217;t be omitted.</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;range&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;20160102T123000.000000&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;to&quot;</span><span class="p">:</span>   <span class="s2">&quot;20160102T123010.000000&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Select query consist of several components:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+           <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;range&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;where&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;group-by&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;order-by&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;limit&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;offset&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;filter&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="range-field">
+<span id="range-field"></span><h3>Range Field<a class="headerlink" href="#range-field" title="Permalink to this headline">¶</a></h3>
+<p>Range field is used to set time bounds.</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;range&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;20160102T123000.000000&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;to&quot;</span><span class="p">:</span>   <span class="s2">&quot;20160102T123010.000000&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This query will scan data from timestamp 2016-01-02 12:30:00 to timestamp 2016-01-02 12:30:10. Timestamps
+should be encoded using ISO 8601 format (only basic format is supported at the moment). Alternatively you
+can use raw timestamps. Note that timestamps is 64-bit value that contains number of nanoseconds since
+Epoch. Example:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;range&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;1453137644600000000&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;to&quot;</span><span class="p">:</span>   <span class="s2">&quot;1453137644799999999&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Query results will look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T173724</span><span class="o">.</span><span class="mi">646397000</span>
+<span class="o">+</span><span class="mi">999996</span>
+<span class="o">+</span><span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T173724</span><span class="o">.</span><span class="mi">647397000</span>
+<span class="o">+</span><span class="mi">999997</span>
+<span class="o">+</span><span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T173724</span><span class="o">.</span><span class="mi">648397000</span>
+<span class="o">+</span><span class="mi">999998</span>
+<span class="o">+</span><span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T173724</span><span class="o">.</span><span class="mi">649397000</span>
+<span class="o">+</span><span class="mi">999999</span>
+</pre></div>
+</div>
+<p>Note that timestamps are increasing. This is because timestamp in &#8220;from&#8221; field is greater than timestamp in
+&#8220;to&#8221; field. We can reverse output order by swapping &#8220;from&#8221; and &#8220;to&#8221; fields. If timestamp in &#8220;to&#8221; field is
+less then timestamp in &#8220;from&#8221; field Akumuli will return results in backward direction. The &#8220;from&#8221; boundary is inclusive and &#8220;to&#8221; boundary is exclusive.</p>
+</div>
+<div class="section" id="where-field">
+<span id="where-field"></span><h3>Where Field<a class="headerlink" href="#where-field" title="Permalink to this headline">¶</a></h3>
+<p>Query results can be further filtered using &#8220;where&#8221; field.</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;where&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;region&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;europe&quot;</span><span class="p">,</span> <span class="s2">&quot;us-east&quot;</span> <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;range&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;20160102T123000.000000&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;to&quot;</span><span class="p">:</span>   <span class="s2">&quot;20160102T123010.000000&quot;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This query will retrieve only those series that have <code class="docutils literal"><span class="pre">cpu</span></code> metric and <code class="docutils literal"><span class="pre">region</span></code> tag which value is set to <code class="docutils literal"><span class="pre">europe</span></code>
+or <code class="docutils literal"><span class="pre">us-east</span></code>.</p>
+</div>
+<div class="section" id="group-by-field">
+<span id="group-by-field"></span><h3>Group-by Field<a class="headerlink" href="#group-by-field" title="Permalink to this headline">¶</a></h3>
+<p>Suppose that you need to store the valve pressure mesurements. Pressure in each valve is measured by
+two separate sensors so you&#8217;re end up with this schema: <code class="docutils literal"><span class="pre">pressure_kPa</span> <span class="pre">valve_num=XXX</span> <span class="pre">sensor_num=YYY</span></code>. Here we
+have <code class="docutils literal"><span class="pre">pressure_kPa</span></code> metric with two tags: <code class="docutils literal"><span class="pre">valve_num</span></code> and <code class="docutils literal"><span class="pre">sensor_num</span></code>. If you query this series you will
+get the following results:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">pressure_kPa</span> <span class="n">valve_num</span><span class="o">=</span><span class="mi">0</span> <span class="n">sensor_num</span><span class="o">=</span><span class="mi">0</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T171000</span><span class="o">.</span><span class="mi">000000000</span>
+<span class="o">+</span><span class="mf">204.0</span>
+<span class="o">+</span><span class="n">pressure_kPa</span> <span class="n">valve_num</span><span class="o">=</span><span class="mi">0</span> <span class="n">sensor_num</span><span class="o">=</span><span class="mi">1</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T171000</span><span class="o">.</span><span class="mi">000000000</span>
+<span class="o">+</span><span class="mf">204.1</span>
+<span class="o">+</span><span class="n">pressure_kPa</span> <span class="n">valve_num</span><span class="o">=</span><span class="mi">1</span> <span class="n">sensor_num</span><span class="o">=</span><span class="mi">0</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T171000</span><span class="o">.</span><span class="mi">000000000</span>
+<span class="o">+</span><span class="mf">208.0</span>
+<span class="o">+</span><span class="n">pressure_kPa</span> <span class="n">valve_num</span><span class="o">=</span><span class="mi">1</span> <span class="n">sensor_num</span><span class="o">=</span><span class="mi">1</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T171000</span><span class="o">.</span><span class="mi">000000000</span>
+<span class="o">+</span><span class="mf">208.2</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Each combination of sensor and valve produces its own time-series. If you want to group data only by valve
+you can use &#8220;group-by&#8221; field.</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;pressure_kPa&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;group-by&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;valve_num&quot;</span> <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As result series that shares the same <code class="docutils literal"><span class="pre">valve_num</span></code> tag value will be merged together. Series that
+don&#8217;t have &#8220;valve_num&#8221; tag will be excluded from search results. Output will look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">pressure_kPa</span> <span class="n">valve_num</span><span class="o">=</span><span class="mi">0</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T171000</span><span class="o">.</span><span class="mi">000000000</span>
+<span class="o">+</span><span class="mf">204.0</span>
+<span class="o">+</span><span class="n">pressure_kPa</span> <span class="n">valve_num</span><span class="o">=</span><span class="mi">0</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T171000</span><span class="o">.</span><span class="mi">000000000</span>
+<span class="o">+</span><span class="mf">204.1</span>
+<span class="o">+</span><span class="n">pressure_kPa</span> <span class="n">valve_num</span><span class="o">=</span><span class="mi">1</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T171000</span><span class="o">.</span><span class="mi">000000000</span>
+<span class="o">+</span><span class="mf">208.0</span>
+<span class="o">+</span><span class="n">pressure_kPa</span> <span class="n">valve_num</span><span class="o">=</span><span class="mi">1</span>
+<span class="o">+</span><span class="mi">20160118</span><span class="n">T171000</span><span class="o">.</span><span class="mi">000000000</span>
+<span class="o">+</span><span class="mf">208.2</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Note that series name is changed now. It contains only those tags that was listed in <code class="docutils literal"><span class="pre">group-by</span></code> field. You can
+use several tags in group-by field using the following syntax: <code class="docutils literal"><span class="pre">&quot;group-by&quot;:</span> <span class="pre">[</span> <span class="pre">&quot;foo&quot;,</span> <span class="pre">&quot;bar&quot;</span> <span class="pre">]</span></code> (in this case
+resulting series names will have both tags <code class="docutils literal"><span class="pre">foo</span></code> and <code class="docutils literal"><span class="pre">bar</span></code>).</p>
+<div class="section" id="order-by-field">
+<span id="order-by-field"></span><h4>Order-by Field<a class="headerlink" href="#order-by-field" title="Permalink to this headline">¶</a></h4>
+<p>This field can be used to control output ordering.</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;order-by&quot;</span><span class="p">:</span> <span class="s2">&quot;series&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This field takes single string. It can be &#8220;series&#8221; or &#8220;time&#8221;. If <code class="docutils literal"><span class="pre">order-by</span></code> is &#8220;series&#8221; the results will be ordered by series name first and then by timestamp. If <code class="docutils literal"><span class="pre">order-by</span></code> is &#8220;time&#8221; then data points will be ordered by timestamp first and then by series name.</p>
+</div>
+<div class="section" id="output-field">
+<span id="output-field"></span><h4>Output Field<a class="headerlink" href="#output-field" title="Permalink to this headline">¶</a></h4>
+<p>You can change query results formatting using <code class="docutils literal"><span class="pre">output</span></code> field. Example:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;output&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;csv&quot;</span> <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This query will return CSV formatted output. <code class="docutils literal"><span class="pre">Format</span></code> field can take two values: <code class="docutils literal"><span class="pre">csv</span></code> or <code class="docutils literal"><span class="pre">resp</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="mi">20160118</span><span class="n">T173724</span><span class="o">.</span><span class="mi">646397000</span><span class="p">,</span> <span class="mi">999996</span>
+<span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="mi">20160118</span><span class="n">T173724</span><span class="o">.</span><span class="mi">647397000</span><span class="p">,</span> <span class="mi">999997</span>
+<span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="mi">20160118</span><span class="n">T173724</span><span class="o">.</span><span class="mi">648397000</span><span class="p">,</span> <span class="mi">999998</span>
+<span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="mi">20160118</span><span class="n">T173724</span><span class="o">.</span><span class="mi">649397000</span><span class="p">,</span> <span class="mi">999999</span>
+</pre></div>
+</div>
+<p>You can change timestamp representation using <code class="docutils literal"><span class="pre">timestamp</span></code> field:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;select&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;output&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;raw&quot;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This query will return CSV formatted output with timestamps formatted as integers:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="mi">1453127844646397000</span><span class="p">,</span> <span class="mi">999996</span>
+<span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="mi">1453127844647397000</span><span class="p">,</span> <span class="mi">999997</span>
+<span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="mi">1453127844648397000</span><span class="p">,</span> <span class="mi">999998</span>
+<span class="n">test</span> <span class="n">tag</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="mi">1453127844649397000</span><span class="p">,</span> <span class="mi">999999</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">Timestamp</span></code> field can take only two values: <code class="docutils literal"><span class="pre">iso</span></code> or <code class="docutils literal"><span class="pre">raw</span></code>.</p>
+</div>
+<div class="section" id="filter-field">
+<span id="filter-field"></span><h4>Filter field<a class="headerlink" href="#filter-field" title="Permalink to this headline">¶</a></h4>
+<p>This field can be used to filter the output.</p>
+<div class="highlight-json"><div class="highlight"><pre>{
+    &quot;select&quot;: &quot;test&quot;,
+    &quot;filter&quot;: { &quot;gt&quot;: 100 },
+    ...
+}
+</pre></div>
+</div>
+<p>This query will return values greater than 100. The possible predicates are &#8220;gt&#8221; (greater than), &#8220;ge&#8221; (greater or equal),
+&#8220;lt&#8221; (less than), and &#8220;le&#8221; (less or equal). It is possible to combine two predicates if you want to read values that
+fit some range, for instance <code class="docutils literal"><span class="pre">&quot;filter:</span> <span class="pre">{&quot;gt&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;lt&quot;:</span> <span class="pre">10</span> <span class="pre">}</span></code> will select all values between 0 and 10, but not 0 and 10.</p>
+</div>
+<div class="section" id="limit-and-offset-fields">
+<span id="limit-and-offset-fields"></span><h4>Limit and Offset Fields.<a class="headerlink" href="#limit-and-offset-fields" title="Permalink to this headline">¶</a></h4>
+<p>You can use <code class="docutils literal"><span class="pre">limit</span></code> and <code class="docutils literal"><span class="pre">offset</span></code> query fields to limit the number of returned tuples and to skip some tuples at
+the beginning of the query output. This fields works the same as LIMIT and OFFSET clauses in SQL.</p>
+</div>
+</div>
+</div>
+<div class="section" id="aggregate-query">
+<span id="aggregate-query"></span><h2>Aggregate Query<a class="headerlink" href="#aggregate-query" title="Permalink to this headline">¶</a></h2>
+<p>Aggregate query consist of several components:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+        <span class="nt">&quot;aggregate&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;range&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;where&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;limit&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;offset&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="aggregate-field">
+<span id="aggregate-field"></span><h3>Aggregate Field<a class="headerlink" href="#aggregate-field" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">aggregate</span></code> field is used to tell Akumuli what metric should be aggregated and what aggregation function should be used.</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;aggregate&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;cpu&quot;</span><span class="p">:</span> <span class="s2">&quot;max&quot;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This query will return max values of all series with <code class="docutils literal"><span class="pre">cpu</span></code> metric. At the moment you can use only one aggregation function per metric and only one metric name. You can use the following aggregation functions:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">count</span></code> - total number of data points in the series (or in time range)</li>
+<li><code class="docutils literal"><span class="pre">max</span></code> - largest value in the series (or in time range)</li>
+<li><code class="docutils literal"><span class="pre">min</span></code> - smallest value in the series (or in time range)</li>
+<li><code class="docutils literal"><span class="pre">mean</span></code> - mean value of the series (or in time range)</li>
+<li><code class="docutils literal"><span class="pre">sum</span></code> - sum of all data points in the series (or in time range)</li>
+<li><code class="docutils literal"><span class="pre">min_timestamp</span></code> - time when smallest value was registered</li>
+<li><code class="docutils literal"><span class="pre">max_timestamp</span></code> - time when largest value was registered</li>
+</ul>
+<p>You can use <code class="docutils literal"><span class="pre">where</span></code>, <code class="docutils literal"><span class="pre">group-by</span></code>, <code class="docutils literal"><span class="pre">range</span></code>, <code class="docutils literal"><span class="pre">output</span></code>, <code class="docutils literal"><span class="pre">limit</span></code>, and <code class="docutils literal"><span class="pre">offset</span></code> fields the same way as in <code class="docutils literal"><span class="pre">select</span></code> query. If <code class="docutils literal"><span class="pre">range</span></code> field is used, aggregate function will be calculated with respect to the specified range.</p>
+</div>
+</div>
+<div class="section" id="join-query">
+<span id="join-query"></span><h2>Join Query<a class="headerlink" href="#join-query" title="Permalink to this headline">¶</a></h2>
+<p>Join query consist of several components:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+             <span class="nt">&quot;join&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;range&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;order-by&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;where&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;limit&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;offset&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="join-field">
+<span id="join-field"></span><h3>Join Field<a class="headerlink" href="#join-field" title="Permalink to this headline">¶</a></h3>
+<p>Join field takes string value with the following format:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;join&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="s2">&quot;mem&quot;</span><span class="p">,</span> <span class="s2">&quot;iops&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here <code class="docutils literal"><span class="pre">cpu</span></code>, <code class="docutils literal"><span class="pre">mem</span></code>, and <code class="docutils literal"><span class="pre">iops</span></code> is different metric names. Query processor will find series names with the same set of tags in this metrics and join them. E.g. if we have three series - &#8220;cpu host=host1&#8221;, &#8220;mem host=host1&#8221;, and &#8220;iops host=host1&#8221; - all three series will be joined together producing single series &#8220;cpu|mem|iops host=host1&#8221;. The output will contain records in <a class="reference external" href="https://github.com/akumuli/Akumuli/wiki/Protocol#writing-measurements-in-bulk">bulk format</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">cpu</span><span class="o">|</span><span class="n">mem</span><span class="o">|</span><span class="n">iops</span> <span class="n">host</span><span class="o">=</span><span class="n">host1</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">+</span><span class="mi">20161231</span><span class="n">T235500</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">*</span><span class="mi">3</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">+</span><span class="mf">10.5</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">+</span><span class="mi">4870</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">+</span><span class="mi">148</span>\<span class="n">r</span>\<span class="n">n</span>
+</pre></div>
+</div>
+<p>You can use <code class="docutils literal"><span class="pre">range</span></code>, <code class="docutils literal"><span class="pre">where</span></code>, <code class="docutils literal"><span class="pre">order-by</span></code>, <code class="docutils literal"><span class="pre">limit</span></code>, <code class="docutils literal"><span class="pre">offset</span></code>, and <code class="docutils literal"><span class="pre">output</span></code> fields the same way as in <code class="docutils literal"><span class="pre">select</span></code> query.</p>
+</div>
+<div class="section" id="join-with-filter">
+<span id="join-with-filter"></span><h3>Join with filter<a class="headerlink" href="#join-with-filter" title="Permalink to this headline">¶</a></h3>
+<p>You can filter by any column using the <code class="docutils literal"><span class="pre">filter</span></code> clause, for example:</p>
+<div class="highlight-json"><div class="highlight"><pre>{
+    &quot;join&quot;: [&quot;cpu&quot;, &quot;mem&quot;, &quot;iops&quot;],
+    &quot;filter&quot;: {
+        &quot;cpu&quot;: { &quot;gt&quot;: 200 },
+        &quot;mem&quot;: { &quot;lt&quot;: 100000000 }
+    },
+    ...
+}
+</pre></div>
+</div>
+<p>This query will work the same way as previous one but return only those value that match the filter.</p>
+</div>
+</div>
+<div class="section" id="group-aggregate-query">
+<span id="group-aggregate-query"></span><h2>Group-Aggregate Query<a class="headerlink" href="#group-aggregate-query" title="Permalink to this headline">¶</a></h2>
+<p>Group-aggregate query consist of these components:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;group-aggregate&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;range&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;order-by&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;group-by&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;where&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;limit&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+           <span class="nt">&quot;offset&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In a nutshell, this query divides all data points into equally sized bins based on timestamp. Then it uses aggregation function(s) to produce single value (or several values if several aggregation functions have been used). This query can be used to resample time-series.</p>
+<div class="section" id="group-aggregate-field">
+<span id="group-aggregate-field"></span><h3>Group-Aggregate Field<a class="headerlink" href="#group-aggregate-field" title="Permalink to this headline">¶</a></h3>
+<p>Group-aggregate field has the following format:</p>
+<div class="highlight-json"><div class="highlight"><pre>{
+  &quot;group-aggregate&quot;: {
+           &quot;metric&quot;: &quot;cpu&quot;,
+             &quot;step&quot;: &quot;1m&quot;,
+             &quot;func&quot;: [ &quot;min&quot;, &quot;max&quot; ]
+  },
+  ...
+}
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">metric</span></code> should contain valid metric name;</li>
+<li><code class="docutils literal"><span class="pre">step</span></code> should contain time interval (e.g. 10s, 1min, 2h);</li>
+<li><code class="docutils literal"><span class="pre">func</span></code> should contain the list of aggregation functions (it is possible to apply several aggregation functions at a time);</li>
+</ul>
+<p>The output of this query will look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">cpu</span><span class="p">:</span><span class="nb">min</span><span class="o">|</span><span class="n">cpu</span><span class="p">:</span><span class="nb">max</span> <span class="n">host</span><span class="o">=</span><span class="n">host1</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">+</span><span class="mi">20170101</span><span class="n">T221015</span><span class="o">.</span><span class="mi">001</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">*</span><span class="mi">2</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">+</span><span class="mf">0.05</span>\<span class="n">r</span>\<span class="n">n</span>
+<span class="o">+</span><span class="mf">99.7</span>\<span class="n">r</span>\<span class="n">n</span>
+</pre></div>
+</div>
+<p>As you can see, the new metric name will be created by concatenating original metric name with function name using &#8216;:&#8217; as a separator, and if you&#8217;re using several aggregation functions several metric names will be concatenated using &#8216;|&#8217; as a separator (as in <code class="docutils literal"><span class="pre">join</span></code> query and bulk-load format).</p>
+<p>You can use <code class="docutils literal"><span class="pre">range</span></code>, <code class="docutils literal"><span class="pre">where</span></code>, <code class="docutils literal"><span class="pre">group-by</span></code>, <code class="docutils literal"><span class="pre">order-by</span></code>, <code class="docutils literal"><span class="pre">limit</span></code>, <code class="docutils literal"><span class="pre">offset</span></code>, and <code class="docutils literal"><span class="pre">output</span></code> fields the same way as in <code class="docutils literal"><span class="pre">select</span></code> query.</p>
+</div>
+<div class="section" id="filter">
+<span id="filter"></span><h3>Filter<a class="headerlink" href="#filter" title="Permalink to this headline">¶</a></h3>
+<p>Filter field works the same way as in join query but instead of metric names you should use aggregation function names.</p>
+<div class="highlight-json"><div class="highlight"><pre>{
+  &quot;group-aggregate&quot;: {
+           &quot;metric&quot;: &quot;cpu&quot;,
+             &quot;step&quot;: &quot;1m&quot;,
+             &quot;func&quot;: [ &quot;min&quot;, &quot;max&quot; ]
+  },
+  &quot;filter&quot;: {
+    &quot;max&quot;: { &quot;gt&quot;: 100 }
+  }
+  ...
+}
+</pre></div>
+</div>
+<p>This query will rows rows which have value greater than 100 in the second column. You can combine several filters the same
+way as in join query. The returned values should match all filters.</p>
+</div>
+</div>
+<div class="section" id="error-handling">
+<span id="error-handling"></span><h2>Error handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h2>
+<p>Query parsing errors are reported using the <a class="reference external" href="https://redis.io/topics/protocol">RESP protocol</a>. The only line in the response will be started with &#8216;-&#8216; followed by the error message.</p>
+<p>Some errors can be reported using the HTTP error codes (e.g. when the wrong API endpoint is used). The query parsing errors are reported using the error messages and the query processing errors usually reported using the HTTP error codes.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="Root.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Query language reference</a><ul>
+<li><a class="reference internal" href="#series-names">Series Names</a></li>
+<li><a class="reference internal" href="#metadata-query">Metadata Query</a></li>
+<li><a class="reference internal" href="#select-query">Select Query</a><ul>
+<li><a class="reference internal" href="#range-field">Range Field</a></li>
+<li><a class="reference internal" href="#where-field">Where Field</a></li>
+<li><a class="reference internal" href="#group-by-field">Group-by Field</a><ul>
+<li><a class="reference internal" href="#order-by-field">Order-by Field</a></li>
+<li><a class="reference internal" href="#output-field">Output Field</a></li>
+<li><a class="reference internal" href="#filter-field">Filter field</a></li>
+<li><a class="reference internal" href="#limit-and-offset-fields">Limit and Offset Fields.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aggregate-query">Aggregate Query</a><ul>
+<li><a class="reference internal" href="#aggregate-field">Aggregate Field</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#join-query">Join Query</a><ul>
+<li><a class="reference internal" href="#join-field">Join Field</a></li>
+<li><a class="reference internal" href="#join-with-filter">Join with filter</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#group-aggregate-query">Group-Aggregate Query</a><ul>
+<li><a class="reference internal" href="#group-aggregate-field">Group-Aggregate Field</a></li>
+<li><a class="reference internal" href="#filter">Filter</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error-handling">Error handling</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="Root.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Reading-data-using-the-HTTP-API.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Eugene Lazin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/Reading-data-using-the-HTTP-API.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

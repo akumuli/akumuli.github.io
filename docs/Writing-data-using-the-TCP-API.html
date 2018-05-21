@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Protocol specification &mdash; Akumuli 0.7.48 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.7.48',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Akumuli 0.7.48 documentation" href="Root.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="protocol-specification">
+<span id="protocol-specification"></span><h1>Protocol specification<a class="headerlink" href="#protocol-specification" title="Permalink to this headline">¶</a></h1>
+<p>Akumuli protocol is based on <a class="reference external" href="http://redis.io/topics/protocol">redis protocol</a>. Please read the Redis protocol description before proceding with Akumuli ingestion protocol.</p>
+<div class="section" id="writing-measurements-by-one">
+<span id="writing-measurements-by-one"></span><h2>Writing measurements by one<a class="headerlink" href="#writing-measurements-by-one" title="Permalink to this headline">¶</a></h2>
+<p>To write data to Akumuli you should specify a series name, timestamp (integer or string), and value (integer or string).</p>
+<p>Series name have the following format: <code class="docutils literal"><span class="pre">&lt;metric-name&gt;</span> <span class="pre">&lt;tags&gt;</span></code>, where <code class="docutils literal"><span class="pre">&lt;tags&gt;</span></code> is a list of key-value pairs separated by space. You should specify both metric name and tags (at least one key-value pair), otherwise it&#8217;s not a valid series name.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><em>&#8220;+cpu_user host=hostname region=NW\r\n&#8221;</em> &#8220;cpu_user&#8221; is a metric name and &#8220;host&#8221; and &#8220;region&#8221; are tags</li>
+<li><em>&#8220;+network.loadavg host=postgres\r\n&#8221;</em> metric name is &#8220;network.loadavg&#8221; and tag &#8220;host&#8221; is set to &#8220;postgres&#8221;</li>
+</ul>
+<p>Series name should be followed by the timestamp:</p>
+<ul class="simple">
+<li>Integer timestamp (nanoseconds since epoch):<ul>
+<li><em>&#8221;:1418224205000000000\r\n&#8221;</em></li>
+</ul>
+</li>
+<li>ISO 8601 encoded UTC date-time (nanosecond precision or lower):<ul>
+<li><em>&#8220;+20141210T074343.999999999\r\n&#8221;</em> (fractional part can go down to nanoseconds)</li>
+</ul>
+</li>
+</ul>
+<p>Note: only basic ISO8601 format is supported. All timestamps are expected to be UTC timestamps. Timezones are not supported.</p>
+<p>The timestamp should be immediately followed by the value:</p>
+<ul class="simple">
+<li>Numeric value encoded by a string.<ul>
+<li><em>&#8220;+24.3\r\n&#8221;</em></li>
+</ul>
+</li>
+<li>Numeric value encoded by int.<ul>
+<li><em>&#8221;:24\r\n&#8221;</em></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="examples">
+<span id="examples"></span><h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>Full message can look like this (\r\n is replaced with real newlines):</p>
+<ul class="simple">
+<li>String timestamp, integer value and string id with two keys:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">balancers</span><span class="o">.</span><span class="n">memusage</span> <span class="n">host</span><span class="o">=</span><span class="n">machine1</span> <span class="n">region</span><span class="o">=</span><span class="n">NW</span>
+<span class="o">+</span><span class="mi">20141210</span><span class="n">T074343</span><span class="o">.</span><span class="mi">999999999</span>
+<span class="p">:</span><span class="mi">31</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Integer timestamp, string value and string id with one key:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">balancers</span><span class="o">.</span><span class="n">cpuload</span> <span class="n">host</span><span class="o">=</span><span class="n">machine1</span> <span class="n">region</span><span class="o">=</span><span class="n">NW</span>
+<span class="p">:</span><span class="mi">1418224205000000000</span>
+<span class="o">+</span><span class="mf">22.0</span>
+</pre></div>
+</div>
+<p><strong>Important:</strong> even the last line in the stream must be finished with \r\n.</p>
+</div>
+</div>
+<div class="section" id="error-messages">
+<span id="error-messages"></span><h2>Error messages<a class="headerlink" href="#error-messages" title="Permalink to this headline">¶</a></h2>
+<p>Akumuli doesn&#8217;t send anything back in response to your writes if everything is OK. But if anything goes wrong it will send error message to client. Client can read data from socket (but not obliged) asynchronously to receive error messages. Error messages are RESP-encoded and will start with &#8216;-&#8216;.</p>
+</div>
+<div class="section" id="writing-measurements-in-bulk">
+<span id="writing-measurements-in-bulk"></span><h2>Writing measurements in bulk<a class="headerlink" href="#writing-measurements-in-bulk" title="Permalink to this headline">¶</a></h2>
+<p>Akumuli assumes that measurements with the same set of tags came from the same object. These measurements will differ only by metric names. E.g. <em>&#8220;mem.usage host=machine1 region=NW&#8221;</em> and <em>&#8220;cpu.user host=machine1 region=NW&#8221;</em> will be considered originating from the same host. That host is described by the set of tags - <em>&#8220;host=machine1 region=NW&#8221;</em> and metric name can be seen as a column name. Usually, it is preferable to write these metrics together and Akumuli has special message format for this case.</p>
+<p>To write data to Akumuli in bulk format you should specify a compound series name, timestamp (integer or string), and an array of values (each value can be integer or string).</p>
+<p>Compound series name format: <code class="docutils literal"><span class="pre">&lt;metric1&gt;|&lt;metric2&gt;|...|&lt;metricN&gt;</span> <span class="pre">&lt;tags&gt;</span></code>. Instead of the single metric name, we&#8217;re writing the list of metric names separated by <code class="docutils literal"><span class="pre">|</span></code> symbol (without spaces!). On the storage side this will be converted to the list of series names: <code class="docutils literal"><span class="pre">&lt;metric1&gt;</span> <span class="pre">&lt;tags&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;metric2&gt;</span> <span class="pre">&lt;tags&gt;</span></code>, etc.</p>
+<p>Example:</p>
+<ul class="simple">
+<li><em>&#8220;+cpu.real|cpu.user|cpu.sys host=machine1 region=NW&#8221;</em></li>
+</ul>
+<p>Series name should be followed by the timestamp:</p>
+<ul class="simple">
+<li>Integer timestamp (nanoseconds since epoch):<ul>
+<li><em>&#8221;:1418224205000000000\r\n&#8221;</em></li>
+</ul>
+</li>
+<li>ISO 8601 encoded UTC date-time (nanosecond precision or lower):<ul>
+<li><em>&#8220;+20141210T074343.999999999\r\n&#8221;</em> (fractional part can go down to nanoseconds)</li>
+</ul>
+</li>
+</ul>
+<p>The timestamp should be immediately followed by the array of values. RESP array starts with <code class="docutils literal"><span class="pre">*</span></code> symbol followed by the number of elements in the array. This number should match the number of metrics in the compound series name! This number should be followed by values (number of values should match the number of metric names and all values should have the same order, e.g. if cpu.real goes first in the compound series name it&#8217;s numeric value should go first in the array).</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">+</span><span class="n">cpu</span><span class="o">.</span><span class="n">real</span><span class="o">|</span><span class="n">cpu</span><span class="o">.</span><span class="n">user</span><span class="o">|</span><span class="n">cpu</span><span class="o">.</span><span class="n">sys</span> <span class="n">host</span><span class="o">=</span><span class="n">machine1</span> <span class="n">region</span><span class="o">=</span><span class="n">NW</span>
+<span class="o">+</span><span class="mi">20141210</span><span class="n">T074343</span>
+<span class="o">*</span><span class="mi">3</span>
+<span class="o">+</span><span class="mf">3.12</span>
+<span class="o">+</span><span class="mf">8.11</span>
+<span class="o">+</span><span class="mf">12.6</span>
+</pre></div>
+</div>
+<p>This will produce three writes:</p>
+<ul class="simple">
+<li>Series name: cpu.real host=machine1 region=NW, TS: 20141210T074343, Value: 3.12</li>
+<li>Series name: cpu.user host=machine1 region=NW, TS: 20141210T074343, Value: 8.11</li>
+<li>Series name: cpu.sys host=machine1 region=NW, TS: 20141210T074343, Value: 12.6</li>
+</ul>
+</div>
+<div class="section" id="opentsdb-telnet-style-api">
+<span id="opentsdb-telnet-style-api"></span><h2>OpenTSDB telnet-style API<a class="headerlink" href="#opentsdb-telnet-style-api" title="Permalink to this headline">¶</a></h2>
+<p>Akumuli have limited support for OpenTSDB telnet-style API. Only <code class="docutils literal"><span class="pre">put</span></code> command supported at the moment (v0.7.14).
+The data can be inserted in this form: <code class="docutils literal"><span class="pre">put</span> <span class="pre">&lt;metric-name&gt;</span> <span class="pre">&lt;timestamp&gt;</span> <span class="pre">&lt;value&gt;</span> <span class="pre">&lt;list-of-tags&gt;</span></code>. Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">put</span> <span class="n">cpu</span><span class="o">.</span><span class="n">user</span> <span class="mi">1483228800</span> <span class="mf">10.005344383927394</span> <span class="n">OS</span><span class="o">=</span><span class="n">Ubuntu_14</span><span class="o">.</span><span class="mi">04</span> <span class="n">arch</span><span class="o">=</span><span class="n">x64</span> <span class="n">host</span><span class="o">=</span><span class="n">host_0</span> <span class="n">instance</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">m3</span><span class="o">.</span><span class="n">large</span> <span class="n">rack</span><span class="o">=</span><span class="mi">86</span> <span class="n">region</span><span class="o">=</span><span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="n">team</span><span class="o">=</span><span class="n">NJ</span>
+<span class="n">put</span> <span class="n">cpu</span><span class="o">.</span><span class="n">sys</span> <span class="mi">1483228800</span> <span class="mf">9.9992693762580025</span> <span class="n">OS</span><span class="o">=</span><span class="n">Ubuntu_14</span><span class="o">.</span><span class="mi">04</span> <span class="n">arch</span><span class="o">=</span><span class="n">x64</span> <span class="n">host</span><span class="o">=</span><span class="n">host_0</span> <span class="n">instance</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">m3</span><span class="o">.</span><span class="n">large</span> <span class="n">rack</span><span class="o">=</span><span class="mi">86</span> <span class="n">region</span><span class="o">=</span><span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="n">team</span><span class="o">=</span><span class="n">NJ</span>
+<span class="n">put</span> <span class="n">cpu</span><span class="o">.</span><span class="n">real</span> <span class="mi">1483228800</span> <span class="mf">10.002083289000792</span> <span class="n">OS</span><span class="o">=</span><span class="n">Ubuntu_14</span><span class="o">.</span><span class="mi">04</span> <span class="n">arch</span><span class="o">=</span><span class="n">x64</span> <span class="n">host</span><span class="o">=</span><span class="n">host_0</span> <span class="n">instance</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">m3</span><span class="o">.</span><span class="n">large</span> <span class="n">rack</span><span class="o">=</span><span class="mi">86</span> <span class="n">region</span><span class="o">=</span><span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="n">team</span><span class="o">=</span><span class="n">NJ</span>
+<span class="n">put</span> <span class="n">idle</span> <span class="mi">1483228800</span> <span class="mf">9.9815370970857522</span> <span class="n">OS</span><span class="o">=</span><span class="n">Ubuntu_14</span><span class="o">.</span><span class="mi">04</span> <span class="n">arch</span><span class="o">=</span><span class="n">x64</span> <span class="n">host</span><span class="o">=</span><span class="n">host_0</span> <span class="n">instance</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">m3</span><span class="o">.</span><span class="n">large</span> <span class="n">rack</span><span class="o">=</span><span class="mi">86</span> <span class="n">region</span><span class="o">=</span><span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="n">team</span><span class="o">=</span><span class="n">NJ</span>
+<span class="n">put</span> <span class="n">mem</span><span class="o">.</span><span class="n">commit</span> <span class="mi">1483228800</span> <span class="mi">9</span> <span class="n">OS</span><span class="o">=</span><span class="n">Ubuntu_14</span><span class="o">.</span><span class="mi">04</span> <span class="n">arch</span><span class="o">=</span><span class="n">x64</span> <span class="n">host</span><span class="o">=</span><span class="n">host_0</span> <span class="n">instance</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">m3</span><span class="o">.</span><span class="n">large</span> <span class="n">rack</span><span class="o">=</span><span class="mi">86</span> <span class="n">region</span><span class="o">=</span><span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="n">team</span><span class="o">=</span><span class="n">NJ</span>
+<span class="n">put</span> <span class="n">mem</span><span class="o">.</span><span class="n">virt</span> <span class="mi">1483228800</span> <span class="mi">10</span> <span class="n">OS</span><span class="o">=</span><span class="n">Ubuntu_14</span><span class="o">.</span><span class="mi">04</span> <span class="n">arch</span><span class="o">=</span><span class="n">x64</span> <span class="n">host</span><span class="o">=</span><span class="n">host_0</span> <span class="n">instance</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">m3</span><span class="o">.</span><span class="n">large</span> <span class="n">rack</span><span class="o">=</span><span class="mi">86</span> <span class="n">region</span><span class="o">=</span><span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="n">team</span><span class="o">=</span><span class="n">NJ</span>
+</pre></div>
+</div>
+<p>The timestamp is a regullar Unix timestamp (number of seconds since epoch), but passing ISO8601-formatted date time or nanosecond precision timestamp will also work.</p>
+<p>OpenTSDB endpoint should be enabled in configuration (it&#8217;s enabled in default configuration generated by <code class="docutils literal"><span class="pre">akumulid</span> <span class="pre">--init</span></code> command). Note that OpenTSDB endpoint in Akumuli is a bit slower than native TCP endpoint.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="Root.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Protocol specification</a><ul>
+<li><a class="reference internal" href="#writing-measurements-by-one">Writing measurements by one</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error-messages">Error messages</a></li>
+<li><a class="reference internal" href="#writing-measurements-in-bulk">Writing measurements in bulk</a></li>
+<li><a class="reference internal" href="#opentsdb-telnet-style-api">OpenTSDB telnet-style API</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="Root.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Writing-data-using-the-TCP-API.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Eugene Lazin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/Writing-data-using-the-TCP-API.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

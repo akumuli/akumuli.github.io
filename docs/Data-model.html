@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Data model &mdash; Akumuli 0.7.48 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.7.48',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Akumuli 0.7.48 documentation" href="Root.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-model">
+<span id="data-model"></span><h1>Data model<a class="headerlink" href="#data-model" title="Permalink to this headline">¶</a></h1>
+<p>Akumuli’s data model is designed to track properties of real-world objects. These properties are supposed to be real-valued. Things like temperature and humidity measured over time by the sensors in the room are good examples of such properties. Another example is a CPU utilization and idle time on the virtual server.</p>
+</div>
+<div class="section" id="tracking-objects">
+<span id="tracking-objects"></span><h1>Tracking objects<a class="headerlink" href="#tracking-objects" title="Permalink to this headline">¶</a></h1>
+<p>Each object is uniquely addressed by the set of tags. For example, the room in the hotel can be pointed by the building and the room numbers (room=42 building=2). So, you can pin down specific room using only two tags.</p>
+<p>The tags can be viewed as an address of the object, but they doesn’t limited to that. You can add redundant tags to increase the search capabilities. In our previous example redundant information like the floor number and the wing of the building (room=42 building=2 floor=1 wing=East) can be added to allow us to select all rooms in some specific part of the building. Akumuli’s query system allows you to use only the subset of tags to select the object (if this subset is unique for each object), e.g. you can still pin down the specific room using two tags (“room” and “building”) even if you have the “floor” and “wing” tags.
+This means that you don’t need to create some unique ids or GUIDs to track your objects (but you still can add them as tags if you really want).</p>
+</div>
+<div class="section" id="properties">
+<span id="properties"></span><h1>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h1>
+<p>Property is an aspect of the object that can be measured. For example, you can measure temperature in the room, voltage in the electric circuit, and amount of free space on disk. Each property has a name usually referred as a measurement name, e.g. ‘temperature’, ‘voltage’, ‘hddfree’. Measurement names should be unique within object. For example, if you want to measure amount of carbon monoxide in the room using two sensors you should use two different measurement names for both sensors. Otherwise you won’t be able to distinguish between measurements of both sensors:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">colevel_A</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">room_type</span><span class="o">=</span><span class="n">Luxe</span>
+<span class="n">colevel_B</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">room_type</span><span class="o">=</span><span class="n">Luxe</span>
+</pre></div>
+</div>
+<p>The other option is to have a tag (but in this case the series will correspond to two different objects):</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">colevel</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">room_type</span><span class="o">=</span><span class="n">Luxe</span> <span class="n">sensor</span><span class="o">=</span><span class="n">A</span>
+<span class="n">colevel</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">room_type</span><span class="o">=</span><span class="n">Luxe</span> <span class="n">sensor</span><span class="o">=</span><span class="n">B</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="series-names">
+<span id="series-names"></span><h1>Series names<a class="headerlink" href="#series-names" title="Permalink to this headline">¶</a></h1>
+<p>Measurement name and the set of tags defines unique series name. Akumuli expects measurement name to be followed by the set of tags. The particular ordering of tags doesn’t matter. This is an example of the series name:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">temperature</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">room_type</span><span class="o">=</span><span class="n">Luxe</span>
+<span class="n">humidity</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">room_type</span><span class="o">=</span><span class="n">Luxe</span>
+<span class="n">colevel</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">room_type</span><span class="o">=</span><span class="n">Luxe</span>
+</pre></div>
+</div>
+<p>These are three series names. All correspond to the same object (room) but different properties. The first one tracks temperature in the room, the second one tracks humidity, and the last one is a carbon monoxide level in the room.</p>
+<p>Another example of the series name from the DevOps monitoring world:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">mem</span><span class="o">.</span><span class="n">commit</span> <span class="n">OS</span><span class="o">=</span><span class="n">Ubuntu_16</span><span class="o">.</span><span class="mi">04</span> <span class="n">region</span><span class="o">=</span><span class="n">ap</span><span class="o">-</span><span class="n">southeast</span><span class="o">-</span><span class="mi">1</span> <span class="n">host</span><span class="o">=</span><span class="n">PG</span><span class="o">-</span><span class="n">mirror</span> <span class="n">host_IP</span><span class="o">=</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">254.1</span> <span class="n">team</span><span class="o">=</span><span class="n">NJ</span> <span class="n">instance</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">m3</span><span class="o">.</span><span class="mi">2</span><span class="n">xlarge</span> <span class="n">arch</span><span class="o">=</span><span class="n">x64</span> <span class="n">rack</span><span class="o">=</span><span class="mi">64</span>
+</pre></div>
+</div>
+<p>This one tracks memory usage on the server. Note that the set of tags is largely redundant. It’s enough to have only “host” or “host_IP” tag to uniquely identify the series. All other tags can be used to provide rich analytics, e.g. you may want to know the average memory use by instance type.
+Note that two series names correspond to the same object only if their tags are equal. This also mean that if you add one tag to series name, the name (and the series) will be different. But you can ignore some tags in queries if you want to collapse several series into one, Akumuli’s query language allows this. So, if you have several carbon monoxide sensors in the room:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">colevel</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">sensor</span><span class="o">=</span><span class="n">A</span>
+<span class="n">colevel</span> <span class="n">room</span><span class="o">=</span><span class="mi">42</span> <span class="n">building</span><span class="o">=</span><span class="mi">2</span> <span class="n">floor</span><span class="o">=</span><span class="mi">1</span> <span class="n">wing</span><span class="o">=</span><span class="n">East</span> <span class="n">sensor</span><span class="o">=</span><span class="n">B</span>
+</pre></div>
+</div>
+<p>You will be able to collapse these two series into one that contains readings from both sensors using the query language.</p>
+</div>
+<div class="section" id="data-points">
+<span id="data-points"></span><h1>Data points<a class="headerlink" href="#data-points" title="Permalink to this headline">¶</a></h1>
+<p>Each data point should contain full series name, the timestamp, and the value. The series name, as described above, should contain metric name and the set of tags.</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">&lt;</span><span class="n">metric</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">tag1</span><span class="o">&gt;=&lt;</span><span class="n">tag</span><span class="o">-</span><span class="n">value1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">tag2</span><span class="o">&gt;=&lt;</span><span class="n">tag</span><span class="o">-</span><span class="n">value2</span><span class="o">&gt;...&lt;</span><span class="n">tagN</span><span class="o">&gt;=&lt;</span><span class="n">tag</span><span class="o">-</span><span class="n">valueN</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The particular order of the tags doesn’t matter, both “metric tag1=1 tag2=2” and “metric tag2=2 tag1=1” correspond to the same series. The metric name, tag names, and tag values can contain any characters except the space character. The series name “mem commit OS=Ubuntu 16.04 region=ap-southeast-1 host=PG-mirror host_IP=172.16.254.1” is invalid because metric name (mem commit) and one of the tag values (Ubuntu 16.04) contains space character. Also, there shouldn’t be any spaces inside the key-value pair before or after the ‘=’ symbol. The tag “region = ap-southeast-1” is wrong, it should be “region=ap-southeast-1”.
+The series shouldn’t be created beforehand. If you write a data point with new series name Akumuli will create new series automatically.</p>
+<p>The timestamp can be a simple integer or datetime in ISO 8601 format (Akumuli only supports combined datetime representation in basic form, like in 20170405T123000.000001001).</p>
+<p>All data points of each series should be sorted by the timestamp. You can write to the different series in any order but each series should receive datapoints with increasing timestamps. If you’ve written a data point with the timestamp set to 20170405T123000.099 to some series and now you’re writing a new data point with the timestamp field set to 20170405T122959.001 you will get a “late write” error.
+The value can be an integer or a floating point number. The recommended formatting method is to use a “%.17g” format string (using printf syntax) or any equivalent. This guarantees that the precision won’t be lost.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="Root.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Data model</a></li>
+<li><a class="reference internal" href="#tracking-objects">Tracking objects</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
+<li><a class="reference internal" href="#series-names">Series names</a></li>
+<li><a class="reference internal" href="#data-points">Data points</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="Root.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Data-model.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Eugene Lazin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/Data-model.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
