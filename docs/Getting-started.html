@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &mdash; Akumuli 0.7.48 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.7.48',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Akumuli 0.7.48 documentation" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<span id="installation"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>You can install Akumuli on Ubuntu 14.04 using this repository: https://packagecloud.io/Lazin/Akumuli.</p>
+<p>Alternatively, you can use this <a class="reference external" href="https://hub.docker.com/r/akumuli/akumuli/">Docker repository</a>.</p>
+<div class="section" id="building-from-source">
+<span id="building-from-source"></span><h2>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ubuntu-debian">
+<span id="ubuntu-debian"></span><h3>Ubuntu / Debian<a class="headerlink" href="#ubuntu-debian" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="prerequisites">
+<span id="prerequisites"></span><h4>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="automatic">
+<span id="automatic"></span><h5>Automatic<a class="headerlink" href="#automatic" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Run <code class="docutils literal"><span class="pre">prerequisites.sh</span></code>. It will try to do the best thing.</li>
+</ul>
+</div>
+<div class="section" id="manual">
+<span id="manual"></span><h5>Manual<a class="headerlink" href="#manual" title="Permalink to this headline">¶</a></h5>
+<p>In case automatic script didn&#8217;t work:</p>
+<ul>
+<li><p class="first">Boost:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">libboost-all-dev</span></code></p>
+</li>
+<li><p class="first">log4cxx:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">log4cxx</span></code> or <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">liblog4cxx-dev</span></code> on Ubuntu 16.04</p>
+</li>
+<li><p class="first">jemalloc:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">libjemalloc-dev</span></code></p>
+</li>
+<li><p class="first">microhttpd:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">libmicrohttpd-dev</span></code></p>
+</li>
+<li><p class="first">APR:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">libapr1-dev</span> <span class="pre">libaprutil1-dev</span> <span class="pre">libaprutil1-dbd-sqlite3</span></code></p>
+</li>
+<li><p class="first">SQLite:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">libsqlite3-dev</span></code></p>
+</li>
+<li><p class="first">Cmake:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">cmake</span></code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="building">
+<span id="building"></span><h4>Building<a class="headerlink" href="#building" title="Permalink to this headline">¶</a></h4>
+<ol class="simple">
+<li><code class="docutils literal"><span class="pre">cmake</span> <span class="pre">.</span></code></li>
+<li><code class="docutils literal"><span class="pre">make</span> <span class="pre">-j4</span></code></li>
+</ol>
+</div>
+</div>
+<div class="section" id="centos-7-rhel7-fedora">
+<span id="centos-7-rhel7-fedora"></span><h3>Centos 7 / RHEL7 / Fedora<a class="headerlink" href="#centos-7-rhel7-fedora" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="automatic">
+<span id="id1"></span><h4>Automatic<a class="headerlink" href="#automatic" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Run <code class="docutils literal"><span class="pre">prerequisites.sh</span></code>. It will try to do the best thing.</li>
+</ul>
+</div>
+<div class="section" id="manual">
+<span id="id2"></span><h4>Manual<a class="headerlink" href="#manual" title="Permalink to this headline">¶</a></h4>
+<p>In case automatic script didn&#8217;t work:</p>
+<ul>
+<li><p class="first">Boost:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">boost</span> <span class="pre">boost-devel</span></code></p>
+</li>
+<li><p class="first">log4cxx:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">log4cxx</span> <span class="pre">log4cxx-devel</span></code></p>
+</li>
+<li><p class="first">jemalloc:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">jemalloc-devel</span></code></p>
+</li>
+<li><p class="first">microhttpd:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">libmicrohttpd-devel</span></code></p>
+</li>
+<li><p class="first">APR:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">apr-devel</span> <span class="pre">apr-util-devel</span> <span class="pre">apr-util-sqlite</span></code></p>
+</li>
+<li><p class="first">SQLite</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">sqlite</span> <span class="pre">sqlite-devel</span></code></p>
+</li>
+<li><p class="first">Cmake:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">cmake</span></code></p>
+</li>
+</ul>
+</div>
+<div class="section" id="building">
+<span id="id3"></span><h4>Building<a class="headerlink" href="#building" title="Permalink to this headline">¶</a></h4>
+<ol class="simple">
+<li><code class="docutils literal"><span class="pre">cmake</span> <span class="pre">.</span></code></li>
+<li><code class="docutils literal"><span class="pre">make</span> <span class="pre">-j4</span></code></li>
+<li><code class="docutils literal"><span class="pre">make</span></code></li>
+</ol>
+</div>
+</div>
+<div class="section" id="centos-6-rhel6">
+<span id="centos-6-rhel6"></span><h3>Centos 6 / RHEL6<a class="headerlink" href="#centos-6-rhel6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="prequisites">
+<span id="prequisites"></span><h4>Prequisites<a class="headerlink" href="#prequisites" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Same as for RHEL7, but we need to manually install log4cxx, as there isn&#8217;t a package in the repos:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">pirbot</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mirrors</span><span class="o">/</span><span class="n">apache</span><span class="o">/</span><span class="n">logging</span><span class="o">/</span><span class="n">log4cxx</span><span class="o">/</span><span class="mf">0.10</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">apache</span><span class="o">-</span><span class="n">log4cxx</span><span class="o">-</span><span class="mf">0.10</span><span class="o">.</span><span class="mf">0.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">apache</span><span class="o">-</span><span class="n">log4cxx</span><span class="o">-</span><span class="mf">0.10</span><span class="o">.</span><span class="mf">0.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> 
+<span class="n">cd</span> <span class="n">apache</span><span class="o">-</span><span class="n">log4cxx</span><span class="o">-</span><span class="mf">0.10</span><span class="o">.</span><span class="mi">0</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Add <code class="docutils literal"><span class="pre">#include</span> <span class="pre">&lt;cstring&gt;</span></code> to: <code class="docutils literal"><span class="pre">src/main/cpp/inputstreamreader.cpp</span></code>, <code class="docutils literal"><span class="pre">src/main/cpp/socketoutputstream.cpp</span></code> and <code class="docutils literal"><span class="pre">src/examples/cpp/console.cpp</span></code></li>
+<li>Add <code class="docutils literal"><span class="pre">#include</span> <span class="pre">&lt;cstdio&gt;</span></code> to: <code class="docutils literal"><span class="pre">src/examples/cpp/console.cpp</span></code></li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=/</span><span class="n">usr</span> <span class="o">--</span><span class="n">libdir</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span>
+<span class="n">make</span> <span class="o">-</span><span class="n">j4</span>
+<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Go on as for RHEL7</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="first-steps">
+<span id="first-steps"></span><h1>First steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="configuration">
+<span id="configuration"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>You should create configuration file first. This can be done using command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">&gt;</span> <span class="n">akumulid</span> <span class="o">--</span><span class="n">init</span>
+<span class="n">OK</span> <span class="n">configuration</span> <span class="n">file</span> <span class="n">created</span> <span class="n">at</span><span class="p">:</span> <span class="s">&quot;/home/username/.akumulid&quot;</span>
+</pre></div>
+</div>
+<p>Now you can edit configuration file <code class="docutils literal"><span class="pre">~/.akumulid</span></code>. This configuration file contains default settings and comments. Two main configuration parameters are <code class="docutils literal"><span class="pre">path</span></code> and <code class="docutils literal"><span class="pre">nvolumes</span></code>. First should contain path to directory when database files should be stored. By default akumuli stores files in <code class="docutils literal"><span class="pre">~/.akumuli</span></code> directory. You can change this to whatever you like (I&#8217;m using <code class="docutils literal"><span class="pre">path=/tmp</span></code> to run tests most often). Second parameter <code class="docutils literal"><span class="pre">nvolumes</span></code> should contain number of volumes that akumuli can use to store data. Each volume&#8217;s size is 4Gb so choose this value wisely.</p>
+</div>
+<div class="section" id="database-creation">
+<span id="database-creation"></span><h2>Database creation<a class="headerlink" href="#database-creation" title="Permalink to this headline">¶</a></h2>
+<p>Now we can create database itself! Run this command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">&gt;</span> <span class="n">akumulid</span> <span class="o">--</span><span class="n">create</span>
+<span class="n">OK</span> <span class="n">database</span> <span class="n">created</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/.</span><span class="n">akumuli</span>
+</pre></div>
+</div>
+<p>You can check that database files is actually created by running <code class="docutils literal"><span class="pre">~/.akumuli</span></code>. This directory shouldn&#8217;t be empty. (NOTE: you can delete all this files by running the following command: <code class="docutils literal"><span class="pre">akumulid</span> <span class="pre">--delete</span></code>)</p>
+</div>
+<div class="section" id="configuring-akumuli">
+<span id="configuring-akumuli"></span><h2>Configuring Akumuli<a class="headerlink" href="#configuring-akumuli" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s return to configuration file (<code class="docutils literal"><span class="pre">~/.akumulid</span></code>). You can read parameter&#8217;s descriptions in configuration file. The most important parameters are:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">path</span></code> - tells Akumuli where database volumes should be stored (default value is ~/.akumuli)</li>
+<li><code class="docutils literal"><span class="pre">nvolumes</span></code> - number of volumes that should be created (this parameter is only used when you run <code class="docutils literal"><span class="pre">akumulid</span> <span class="pre">--create</span></code> command). If <code class="docutils literal"><span class="pre">nvolumes</span></code> is set to 0 the storage will be expanded on demand without deleting old data.</li>
+<li><code class="docutils literal"><span class="pre">volume_size</span></code> - size of the individual volume (this parameter is only used when you run <code class="docutils literal"><span class="pre">akumulid</span> <span class="pre">--create</span></code> command)</li>
+<li><code class="docutils literal"><span class="pre">HTTP.port</span></code> - port used by HTTP server</li>
+<li><code class="docutils literal"><span class="pre">TCP.port</span></code> - port used by TCP server</li>
+<li><code class="docutils literal"><span class="pre">TCP.pool_size</span></code> - number of threads that should be used to process data (should be less then number of CPUs, if you set this value to 0 the system will try to chose optimal size on start)</li>
+<li><code class="docutils literal"><span class="pre">UDP.port</span></code> - port used by UDP server</li>
+<li><code class="docutils literal"><span class="pre">UDP.pool_size</span></code> - number of threads that should be used to process data (should be less then the number of CPUs)</li>
+<li>Log4cpp configuration</li>
+</ul>
+</div>
+<div class="section" id="running-the-server">
+<span id="running-the-server"></span><h2>Running the server<a class="headerlink" href="#running-the-server" title="Permalink to this headline">¶</a></h2>
+<p>To run <code class="docutils literal"><span class="pre">akumulid</span></code> as a server - just run it without parameters:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">&gt;</span> <span class="n">akumulid</span>
+<span class="n">OK</span> <span class="n">UDP</span>  <span class="n">server</span> <span class="n">started</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="mi">8383</span>
+<span class="n">OK</span> <span class="n">TCP</span>  <span class="n">server</span> <span class="n">started</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="mi">8282</span>
+<span class="n">OK</span> <span class="n">HTTP</span> <span class="n">server</span> <span class="n">started</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="mi">8181</span>
+</pre></div>
+</div>
+<p>Now you can write data through TCP or UDP and read data using HTTP.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#building-from-source">Building from source</a><ul>
+<li><a class="reference internal" href="#ubuntu-debian">Ubuntu / Debian</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li><a class="reference internal" href="#automatic">Automatic</a></li>
+<li><a class="reference internal" href="#manual">Manual</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building">Building</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#centos-7-rhel7-fedora">Centos 7 / RHEL7 / Fedora</a><ul>
+<li><a class="reference internal" href="#automatic">Automatic</a></li>
+<li><a class="reference internal" href="#manual">Manual</a></li>
+<li><a class="reference internal" href="#building">Building</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#centos-6-rhel6">Centos 6 / RHEL6</a><ul>
+<li><a class="reference internal" href="#prequisites">Prequisites</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#first-steps">First steps</a><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#database-creation">Database creation</a></li>
+<li><a class="reference internal" href="#configuring-akumuli">Configuring Akumuli</a></li>
+<li><a class="reference internal" href="#running-the-server">Running the server</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Getting-started.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Eugene Lazin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/Getting-started.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
