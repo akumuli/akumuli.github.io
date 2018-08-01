@@ -6,7 +6,7 @@ Akumuli’s data model is designed to track properties of real-world objects. Th
 
 Each object is uniquely addressed by the set of tags. For example, the room in the hotel can be pointed by the building and the room numbers (room=42 building=2). So, you can pin down specific room using only two tags.
 
-The tags can be viewed as an address of the object, but they doesn’t limited to that. You can add redundant tags to increase the search capabilities. In our previous example redundant information like the floor number and the wing of the building (room=42 building=2 floor=1 wing=East) can be added to allow us to select all rooms in some specific part of the building. Akumuli’s query system allows you to use only the subset of tags to select the object (if this subset is unique for each object), e.g. you can still pin down the specific room using two tags (“room” and “building”) even if you have the “floor” and “wing” tags.
+The tags can be viewed as an address of the object, but they aren't limited to that. You can add redundant tags to increase the search capabilities. In our previous example redundant information like the floor number and the wing of the building (room=42 building=2 floor=1 wing=East) can be added to allow us to select all rooms in some specific part of the building. Akumuli’s query system allows you to use only the subset of tags to select the object (if this subset is unique for each object), e.g. you can still pin down the specific room using two tags (“room” and “building”) even if you have the “floor” and “wing” tags.
 This means that you don’t need to create some unique ids or GUIDs to track your objects (but you still can add them as tags if you really want).
 
 # Properties
