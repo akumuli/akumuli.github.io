@@ -10,9 +10,9 @@ Every TSDB have to deal with vast data volumes. But it’s not only writes per s
 There is a different dimension to the problem which is not tackled by most TSDB vendors. 
 This problem is a dataset cardinality, the number of individual series in the database. It plays a really huge role.
 
-It’s safe to assume that any TSDB will work reasonably well if the cardinality is small (100K of metrics). But when cardinality is high (millions of metrics) we have to deal with the hard problem. Most TSDBs will start to generate write timeout errors or eat up the RAM. For instance, Akumuli will use a lot of RAM because it allocates some memory for every time-series stored on disk (because you don’t want to sacrifice runtime read or write efficiency or on-disk compression).
+It’s safe to assume that any TSDB will work reasonably well if the cardinality is small (100K of metrics). But when cardinality is high (millions of metrics) we have to deal with the hard problem. Most TSDBs will start to generate write timeout errors or eat up the RAM. For instance, Akumuli will use a lot of RAM because it allocates some memory for every time-series stored on disk.
 
-Akumuli’s memory requirements depend on cardinality. To handle 1M unique time-series it needed around 10GB of RAM. 2M unique time-series will need 20GB and so on. 
+Akumuli’s memory requirements depend on cardinality. To handle 1M unique time-series it needs around 10GB of RAM. 2M unique time-series will need 20GB and so on. 
 
 Where did this numbers came from? First of all, Akumuli writes data in fixed-size blocks. Each block is 4KB. When you create a time-series and write data into it, Akumuli allocates a memory block and fills it with compressed data. When it gets full it writes it to disk and allocates the next one. It have to write in 4KB blocks to minimize wear leveling and write amplification of the SSD. It will always allocate 4KB of memory for every time-series for this purpose. Even if only small fraction of this memory is used. So, the memory y expenses for all series will be `cardinality * 4KB`. If the database stores one million series the memory resident pages will eat around 3.8GB of RAM.
 
