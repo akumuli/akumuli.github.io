@@ -16,11 +16,15 @@ Akumuli’s memory requirements depend on cardinality. To handle 1M unique time-
 
 Where did this numbers came from? First of all, Akumuli writes data in fixed-size blocks. Each block is 4KB. When you create a time-series and write data into it, Akumuli allocates a memory block and fills it with compressed data. When it gets full it writes it to disk and allocates the next one. It have to write in 4KB blocks to minimize wear leveling and write amplification of the SSD. It will always allocate 4KB of memory for every time-series for this purpose. So, the very minimal memory use will be `cardinality * 4KB`.
 
+![4KB page write](/images/4KB-page.png)
+
 This problem was solved in latest release. New algorithm allocates 4KB pages partially by 1KB blocks! When you start writing it allocates first 1KB. When the first block gets full it allocates the second 1KB block and so on, until 4KB will be allocated and filled with data. Now it’s time to write it to disk.
 
 The problem is that we have four disjoint 1KB memory regions that we need to write into one 4KB page. We can’t just perform four 1KB writes because it won’t be atomic. If something will happen in the middle we will end up with partially updated block in the database! The database will be corrupted. Also, multiple updates are bad for SSD. SSD can’t update pages in-place. It's controller uses read-update-modify sequence to fetch old page, update it and write it into the new place. This will increase the wear leveling and will introduce a lot of work for the garbage collector inside the SSD controller.
 
 So, we need to write this four 1KB blocks as one 4KB block. We can actually do this using the vector I/O (aka scatter/gather I/O). Using one `writev` call on Linux we can pack all four buffers into one `iovec` array which will be written atomically. Using only one write operation. This method is as efficient as ordinary write given that it involves only one syscall. But the most important, it provides atomicity so there is no in-between state. The page will be written completely or not written at all.
+
+![4KB page by 1KB chunks](/images/1KB-page.png)
 
 This simple trick allows to lower memory requirements by 50%. This is due to the fact that on average every series will have just two 1KB blocks allocated. I'm not going to bore you but it's easy to prove if you curious.
 
