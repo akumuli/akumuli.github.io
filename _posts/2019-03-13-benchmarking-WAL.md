@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Benchmarking WAL
+title:      Runtime Cost of Write-Ahead Logging
 date:       2019-03-13 12:00:00
 summary:  Recent major Akumuli release added support for write-ahead logging. This is a huge milestone for several reasons...
 categories: akumuli
