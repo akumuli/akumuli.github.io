@@ -41,7 +41,7 @@ At this point I also setup the monitoring for both load generator and the target
 To run the test ssh to the load generator and run **bash run.sh**. This script does two things. First of all it send data from every generated file to the Akumuli instance on the target machine in parallel. This is why 6-core droplet is needed. The data is sent via a bash itself using this syntax: 
 
 ```
-cat big-ass-test-file.gz | gunzip > /dev/tcp/$AKUMULI_ENDPOINT/8282 & 
+cat test-file.gz | gunzip > /dev/tcp/$IP/8282 & 
 ```
 
 Note that this command send uncompressed data so the actual transferred volume was not 222GB but close to 775GB.
