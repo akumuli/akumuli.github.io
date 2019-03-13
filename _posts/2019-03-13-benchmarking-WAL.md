@@ -24,7 +24,7 @@ Both droplets have 6TB of transfer which is enough for the test.
 
 ### Test Data
 
-All benchmark code lives in [this repository](https://github.com/Lazin/roundtrip_test). To generate the data you have to clone it and run `bash gen.sh`. This script generates 6 gzip archives with test data in Akumuli format (the one that is normally used for ingestion). It takes many hours to finish and uses 222GB of disk space. This dataset should contain ~60-billion data-points from ~350000 unique time-series.
+All benchmark code lives in [this repository](https://github.com/Lazin/roundtrip_test). To generate the data you have to clone it and run **bash gen.sh**. This script generates 6 gzip archives with test data in Akumuli format (the one that is normally used for ingestion). It takes many hours to finish and uses 222GB of disk space. This dataset should contain ~60-billion data-points from ~350000 unique time-series.
 
 ![Test data](/images/walterm.png)
 
@@ -32,16 +32,29 @@ Individual series are generated using random walk algorithm. Every series name h
 
 ### Target
 
-On the target machine I installed Akumuli from the [package repository](https://packagecloud.io/Lazin/Akumuli). Then I configured it by running `akumulid --init` and editing `~/.akumulid` configuration file. First of all I increased number of volumes to 20 (to use 80GB of disk out of available 100GB) and commented `[WAL]` section and all its elements. After that I created the database by running `akumulid --create` and started the server by running `akumulid`.
+On the target machine I installed Akumuli from the [package repository](https://packagecloud.io/Lazin/Akumuli). Then I configured it by running **akumulid --init** and editing *~/.akumulid* configuration file. First of all I increased number of volumes to 20 (to use 80GB of disk out of available 100GB) and commented *[WAL]* section and all its elements. After that I created the database by running **akumulid --create** and started the server by running **akumulid**.
 
-At this point I also setup the monitoring for both load generator and the target. I installed and configured Akumuli on load generator (all parameters left default). Also, I installed netdata on both machines. Both netdata instances was configured to send metrics in OpenTSDB format to the second Akumuli instance on load generator box. I also used *apps* plugin to generate metrics for the *akumulid* process.
+At this point I also setup the monitoring for both load generator and the target. I installed and configured Akumuli on load generator (all parameters left default). Also, I installed netdata on both machines. Both netdata instances was configured to send metrics in OpenTSDB format to the second Akumuli instance on load generator box. I also used *apps* plugin to generate metrics for the akumulid process. Also, I set up Grafana and installed [Akumuli datasource plugin](https://grafana.com/plugins/akumuli-datasource).
 
 ### Running The Tests
 
-To run the test ssh to the load generator and run *bash run.sh*. This script does two things. First of all it send data from every generated file to the Akumuli instance on the target machine in parallel. This is why 6-core droplet is needed. The data is sent via a bash itself using this syntax: *cat big-ass-test-file.gz | gunzip > /dev/tcp/$AKUMULI_ENDPOINT/8282 &*. Note that this command send uncompressed data so the actual transferred volume was not 222GB but close to 775GB.
+To run the test ssh to the load generator and run **bash run.sh**. This script does two things. First of all it send data from every generated file to the Akumuli instance on the target machine in parallel. This is why 6-core droplet is needed. The data is sent via a bash itself using this syntax: 
+
+```
+cat big-ass-test-file.gz | gunzip > /dev/tcp/$AKUMULI_ENDPOINT/8282 & 
+```
+
+Note that this command send uncompressed data so the actual transferred volume was not 222GB but close to 775GB.
 The second thing script does happens when all data is sent. It queries Akumuli instance on the target machine trying to fetch last data-point it had sent. It's needed to make sure that all input was processed by the database server.
 
-When *run.sh* finished I recorded the results, reconfigured target machine by resetting the database via `akumulid --delete; akumulid --create` and uncommenting the `[WAL]` section in the configuration file. After that I started `akumulid` on the target machine and `run.sh` on load generator.
+When **run.sh** finished I recorded the results, reconfigured target machine by resetting the database via 
+
+```
+akumulid --delete
+akumulid --create 
+```
+
+and uncommenting the *[WAL]* section in the configuration file. After that I started **akumulid** on the target machine and **run.sh** on load generator.
 
 Here is how the first run looked like.
 
